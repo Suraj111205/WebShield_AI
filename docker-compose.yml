@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: webshield-postgres
+    environment:
+      POSTGRES_DB: webshield
+      POSTGRES_USER: webshielduser
+      POSTGRES_PASSWORD: webshieldpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: webshield-app
+    environment:
+      DATABASE_URL: postgresql://cyberuser:cyberpassword@postgres:5432/cyberdefense
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

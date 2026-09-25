@@ -1,0 +1,28 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment variables
+.env
+
+# Scratch scripts & temporary build artifacts
+scratch/
+
+# Reports folder: Keep directory tracked in Git, ignore generated PDF reports
+reports/*
+!reports/.gitkeep
+
+# Operating System & IDE artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
