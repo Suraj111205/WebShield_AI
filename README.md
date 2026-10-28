@@ -1,4 +1,4 @@
-# WebShield AI — Security Advisor & Vulnerability Scanner
+# WebShield AI - Security Advisor & Vulnerability Scanner
 
 A friendly, easy-to-use website vulnerability scanner and security advisor that helps you find website weaknesses, discover pages and forms, and fix issues with simple guidance.
 
@@ -34,19 +34,19 @@ WebShield AI checks for vulnerabilities across **10 OWASP Top 10 categories**:
 
 ## Scanning Levels
 
-1. **Basic Scan (Free — Quick Surface Check):**
+1. **Basic Scan (Free - Quick Surface Check):**
    - **Scope:** Homepage only (Depth 0).
-   - **Speed:** 2–5 seconds.
+   - **Speed:** 2 to 5 seconds.
    - **Checks:** SSL/TLS certificate validity, HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, Server version banners.
 
-2. **Medium Scan (Recommended — Interactive & Form Checks):**
+2. **Medium Scan (Recommended - Interactive & Form Checks):**
    - **Scope:** Level-1 BFS Queue crawl (Homepage + direct links up to 10 pages).
-   - **Speed:** 10–20 seconds.
+   - **Speed:** 10 to 20 seconds.
    - **Checks:** Everything in Basic Scan + unencrypted HTTP form submissions, password inputs over insecure channels, missing anti-CSRF tokens on POST forms, exposed administrative endpoints (`/admin`, `/login`).
 
-3. **Deep Scan (Most Thorough — Deep Architecture & File Audit):**
+3. **Deep Scan (Most Thorough - Deep Architecture & File Audit):**
    - **Scope:** Multi-level BFS Queue crawl (Depth 2, up to 25 linked pages).
-   - **Speed:** 30–60 seconds.
+   - **Speed:** 30 to 60 seconds.
    - **Checks:** Everything in Basic & Medium scans + cookie security flags (`HttpOnly`, `Secure`), exposed backup files (`.bak`, `.sql`, `.env`), subresource integrity, and full downloadable executive PDF report.
 
 ---
@@ -72,10 +72,67 @@ WebShield AI checks for vulnerabilities across **10 OWASP Top 10 categories**:
 2. Open a terminal in this folder.
 3. Activate virtual environment:
    ```powershell
-   venv\Scripts\activate
+   .\venv\Scripts\Activate.ps1
    ```
 4. Start the server:
    ```bash
    uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
    ```
 5. Open in browser: `http://127.0.0.1:8000`
+
+---
+
+## Custom Domain Deployment Guide
+
+To connect a custom domain (e.g. `scanner.yourdomain.com` or `webshieldai.com`) for production launch:
+
+### 1. DNS Configuration
+In your DNS provider (Cloudflare, Namecheap, GoDaddy, Route 53):
+- **A Record:** Point `@` or your subdomain to your server's Public IPv4 address.
+- **CNAME Record (if using PaaS like Render/Railway):** Point your subdomain to the PaaS domain target provided in the dashboard.
+
+### 2. Nginx Reverse Proxy Configuration (Production VPS / Linux Server)
+Create `/etc/nginx/sites-available/webshield`:
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+Enable the site and obtain SSL via Let's Encrypt:
+```bash
+sudo ln -s /etc/nginx/sites-available/webshield /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+```
+
+### 3. Running as a System Service (systemd)
+Create `/etc/systemd/system/webshield.service`:
+```ini
+[Unit]
+Description=WebShield AI Defense System
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/path/to/autonomous-cyber-defense-system
+ExecStart=/path/to/autonomous-cyber-defense-system/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 4
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+Start and enable the service:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable webshield
+sudo systemctl start webshield
+```

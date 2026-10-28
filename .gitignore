@@ -26,3 +26,16 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Test scratch files
+test_body.json
+
+# Private documentation & project logs (do not push to repo)
+launch_audit.md
+MAJOR_PROJECT_LOGBOOK.md
+PROJECT_PRESENTATION_GUIDE.md

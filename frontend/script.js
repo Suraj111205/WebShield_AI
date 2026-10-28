@@ -1,5 +1,5 @@
 /**
- * WebShield AI — Dynamic Autonomous Security Advisor & Scanner
+ * WebShield AI - Dynamic Autonomous Security Advisor & Scanner
  * Starts clean and fresh on page load/reload as requested.
  */
 
@@ -12,7 +12,7 @@ let currentSelectedLevel = 'basic';
 const SCAN_LEVEL_DATA = {
     basic: {
         name: "Basic Scan",
-        sub: "A quick surface check — great for beginners.",
+        sub: "A quick surface check - great for beginners.",
         depth: 0,
         checks: [
             "SSL/TLS certificate validity (Is your site using HTTPS?)",
@@ -25,7 +25,7 @@ const SCAN_LEVEL_DATA = {
     },
     medium: {
         name: "Medium Scan",
-        sub: "Follows all direct links & checks forms — recommended for most sites.",
+        sub: "Follows all direct links & checks forms - recommended for most sites.",
         depth: 1,
         checks: [
             "Everything in Basic Scan",
@@ -38,7 +38,7 @@ const SCAN_LEVEL_DATA = {
     },
     deep: {
         name: "Deep Scan",
-        sub: "Thorough multi-page crawler & deep security audit — up to 25 pages.",
+        sub: "Thorough multi-page crawler & deep security audit - up to 25 pages.",
         depth: 2,
         checks: [
             "Everything in Basic & Medium scans",
@@ -64,19 +64,26 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Reset to default Basic Scan level
     selectScannerLevel('basic');
 
-    // 4. Initialize dynamic counter animations
-    initHeroCounters();
+    // 4. Always reset chat history to clean state on fresh page load/reload
+    clearChatHistory();
 
-    // 5. Restore chat history if user was interacting with advisor
-    restoreChatHistory();
+    // 6. Initialize user authentication state and scan quota
+    initAuthAndQuota();
 });
 
 function cleanReloadState() {
-    // Clear stored previous scans and target URLs so page is completely fresh
+    // Clear stored previous scans, target URLs, and chat history so page is completely fresh
     localStorage.removeItem("webshield_last_scan");
     localStorage.removeItem("webshield_target_url");
     localStorage.removeItem("webshield_terminal_logs");
+    localStorage.removeItem("webshield_chat_history");
+    clearChatHistory();
     currentScanData = null;
+
+    // Reset guest scan quota session on reload so each refresh resets free scans back to 2
+    const freshGuestId = "guest_" + Date.now() + "_" + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem("webshield_guest_id", freshGuestId);
+    sessionStorage.setItem("webshield_guest_id", freshGuestId);
 
     // Reset input fields to empty
     const cardUrl = document.getElementById("card-target-url");
@@ -137,36 +144,11 @@ function initTargetSync() {
 }
 
 function initHeroCounters() {
-    const heroScansEl = document.getElementById("hero-stat-scans");
-    if (heroScansEl) {
-        animateValue(heroScansEl, 0, 1250, 700, "+");
-    }
-    const heroVulnsEl = document.getElementById("hero-stat-vulns");
-    if (heroVulnsEl) {
-        animateValue(heroVulnsEl, 0, 15, 500, "+");
-    }
-}
-
-function animateValue(obj, start, end, duration, suffix = "") {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        }
-    };
-    window.requestAnimationFrame(step);
+    // Honest static metrics - no fake counter animation
 }
 
 function restoreChatHistory() {
-    const savedChat = localStorage.getItem("webshield_chat_history");
-    const stream = document.getElementById("drawer-chat-stream");
-    if (savedChat && stream) {
-        stream.innerHTML = savedChat;
-        stream.scrollTop = stream.scrollHeight;
-    }
+    clearChatHistory();
 }
 
 function clearChatHistory() {
@@ -210,10 +192,10 @@ function updateOwaspMatrixStatus(vulnerabilities) {
         const count = counts[code];
         if (count > 0) {
             pill.className = "owasp-status-pill flagged";
-            pill.innerHTML = `⚠️ ${count} ${count === 1 ? 'Issue' : 'Issues'} Found`;
+            pill.innerHTML = `${count} ${count === 1 ? 'Issue' : 'Issues'} Found`;
         } else {
             pill.className = "owasp-status-pill clean";
-            pill.innerHTML = `✓ Safe (Clean)`;
+            pill.innerHTML = `Safe (Clean)`;
         }
     }
 }
@@ -253,7 +235,7 @@ function selectScannerLevel(level) {
     if (listEl) {
         listEl.innerHTML = data.checks.map(item => `
             <div class="check-feature-item">
-                <span class="icon">✓</span>
+                <span class="icon" style="font-weight: 700;">+</span>
                 <span>${escapeHtml(item)}</span>
             </div>
         `).join("");
@@ -332,6 +314,13 @@ function launchCardScan() {
 async function launchAutonomousScan() {
     if (isScanning) return;
 
+    // Check if guest has exhausted the 2-scan limit before launching
+    if (!currentUser && currentQuota && currentQuota.remaining <= 0) {
+        openLimitModal("Your free credits are over");
+        addTerminalLog("ERROR", "Your free credits are over! Please sign in or register for unlimited scans.");
+        return;
+    }
+
     const target = getFullTargetUrl();
     const depth = parseInt(document.getElementById("crawl-depth").value, 10) || 0;
     const speed = document.getElementById("scan-speed") ? document.getElementById("scan-speed").value : "Balanced";
@@ -358,9 +347,17 @@ async function launchAutonomousScan() {
     startProgressSimulation();
 
     try {
+        const token = getAuthToken();
+        const guestId = getGuestId();
+
         const response = await fetch("/api/scan", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": token ? `Bearer ${token}` : "",
+                "x-auth-token": token,
+                "x-guest-id": guestId
+            },
             body: JSON.stringify({
                 target_url: target,
                 crawl_depth: depth,
@@ -370,12 +367,36 @@ async function launchAutonomousScan() {
             })
         });
 
-        if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.detail || `Scan request failed with HTTP ${response.status}`);
+        const data = await response.json();
+
+        // Check if guest scan limit reached
+        if (data.limit_reached || data.error_code === "SCAN_LIMIT_REACHED") {
+            if (simulationInterval) clearInterval(simulationInterval);
+            isScanning = false;
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span>Start Free Scan</span>
+                `;
+            }
+            if (data.quota) updateQuotaUI(data.quota);
+            openLimitModal("Your free credits are over");
+            addTerminalLog("ERROR", "Your free credits are over! Please sign in or register for unlimited scans.");
+            return;
         }
 
-        const data = await response.json();
+        if (!response.ok || data.status === "error") {
+            throw new Error(data.message || `Scan request failed with HTTP ${response.status}`);
+        }
+
+        // Update quota on successful scan
+        if (data.quota) {
+            updateQuotaUI(data.quota);
+        }
 
         if (simulationInterval) clearInterval(simulationInterval);
         for (let i = 1; i <= 5; i++) {
@@ -576,7 +597,7 @@ function renderAttackSurface(data) {
         } else {
             formsBody.innerHTML = forms.map(f => `
                 <tr>
-                    <td><span style="font-weight: 700; color: var(--neon-purple);">${escapeHtml(f.method || 'GET')}</span></td>
+                    <td><span style="font-weight: 700; color: var(--neon-cyan);">${escapeHtml(f.method || 'GET')}</span></td>
                     <td>${escapeHtml(f.action || f.page)}</td>
                     <td style="color: var(--text-muted);">${(f.inputs && f.inputs.length) ? f.inputs.map(i => `<code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:3px; margin-right:4px;">${escapeHtml(i)}</code>`).join(' ') : '<em>No input parameters</em>'}</td>
                 </tr>
@@ -636,7 +657,12 @@ function renderFindings(vulns) {
     if (!vulns || !vulns.length) {
         container.innerHTML = `
             <div style="text-align: center; padding: 48px; background: rgba(0,230,118,0.05); border: 1px dashed var(--neon-emerald); border-radius: var(--radius-lg);">
-                <div style="font-size: 2.5rem; margin-bottom: 12px;">🛡️</div>
+                <div style="margin-bottom: 12px; color: var(--neon-emerald);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                </div>
                 <h3 style="color: var(--neon-emerald); font-weight: 700; margin-bottom: 6px;">No Security Issues Found</h3>
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Your website looks safe for the selected scan level.</p>
             </div>
@@ -727,6 +753,15 @@ function askQuickPrompt(questionText) {
     }
 }
 
+function formatAiMarkdown(text) {
+    if (!text) return "";
+    let formatted = escapeHtml(text);
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    formatted = formatted.replace(/`([^`]+)`/g, '<code style="background:rgba(0,229,255,0.12); color:#00e5ff; padding:2px 5px; border-radius:4px; font-family:var(--font-mono); font-size:0.8rem;">$1</code>');
+    return formatted;
+}
+
 async function handleAIChatSubmit(e) {
     e.preventDefault();
     const input = document.getElementById("ai-user-query");
@@ -744,7 +779,7 @@ async function handleAIChatSubmit(e) {
 
     const botBubble = document.createElement("div");
     botBubble.className = "chat-bubble bot";
-    botBubble.innerHTML = `<span style="color:var(--neon-cyan);">Thinking and preparing simple advice...</span>`;
+    botBubble.innerHTML = `<span style="color:var(--neon-cyan);">Thinking and generating personalized advice...</span>`;
     stream.appendChild(botBubble);
     stream.scrollTop = stream.scrollHeight;
 
@@ -756,21 +791,10 @@ async function handleAIChatSubmit(e) {
         });
         const data = await res.json();
 
-        let replyHtml = `<strong>${escapeHtml(data.title || 'Security Analysis')}</strong><br><br>`;
-        replyHtml += `<div style="white-space: pre-wrap;">${escapeHtml(data.content || '')}</div>`;
-
-        if (data.remediation) {
-            replyHtml += `<br><div style="margin-top:8px; padding:10px; background:#05070d; border-radius:6px; border:1px solid rgba(0,229,255,0.2);">`;
-            replyHtml += `<div style="color:var(--neon-cyan); font-weight:700; font-size:0.75rem; margin-bottom:6px;">PROPOSED REMEDIATION:</div>`;
-            for (const [key, code] of Object.entries(data.remediation)) {
-                replyHtml += `<div style="font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; margin-top:4px;">${escapeHtml(key)}:</div>`;
-                replyHtml += `<code style="display:block; background:#000; padding:6px; border-radius:4px; font-family:var(--font-mono); font-size:0.75rem; color:#a5d6a7; overflow-x:auto;">${escapeHtml(code)}</code>`;
-            }
-            replyHtml += `</div>`;
-        }
+        let replyHtml = `<strong>${escapeHtml(data.title || 'Security Advisor')}</strong><br><br>`;
+        replyHtml += `<div style="white-space: pre-wrap; line-height: 1.55;">${formatAiMarkdown(data.content || '')}</div>`;
 
         botBubble.innerHTML = replyHtml;
-        localStorage.setItem("webshield_chat_history", stream.innerHTML);
 
     } catch (err) {
         botBubble.innerHTML = `<span style="color:var(--neon-crimson);">Failed to contact AI service: ${escapeHtml(err.message)}</span>`;
@@ -806,8 +830,171 @@ function scrollToSection(id) {
     }
 }
 
+// ==========================================================================
+// Authentication & Quota Management
+// ==========================================================================
+
+let currentUser = null;
+let currentQuota = { used: 0, remaining: 2, limit: 2, is_unlimited: false };
+
+function getGuestId() {
+    let gid = sessionStorage.getItem("webshield_guest_id") || localStorage.getItem("webshield_guest_id");
+    if (!gid) {
+        gid = "guest_" + Date.now() + "_" + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem("webshield_guest_id", gid);
+        sessionStorage.setItem("webshield_guest_id", gid);
+    }
+    return gid;
+}
+
+function getAuthToken() {
+    return localStorage.getItem("webshield_auth_token") || getCookie("webshield_session") || "";
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return "";
+}
+
+async function initAuthAndQuota() {
+    const token = getAuthToken();
+    const guestId = getGuestId();
+
+    try {
+        const res = await fetch("/api/auth/status", {
+            headers: {
+                "Authorization": token ? `Bearer ${token}` : "",
+                "x-auth-token": token,
+                "x-guest-id": guestId
+            }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.authenticated && data.user) {
+                currentUser = data.user;
+                currentQuota = {
+                    is_unlimited: true,
+                    used: data.user.scan_count || 0,
+                    remaining: "unlimited",
+                    limit: "unlimited"
+                };
+            } else {
+                currentUser = null;
+                currentQuota = data.quota || { used: 0, remaining: 2, limit: 2, is_unlimited: false };
+            }
+        }
+    } catch (e) {
+        console.warn("Could not fetch auth status:", e);
+    }
+
+    renderNavAuth();
+    updateQuotaUI();
+}
+
+function renderNavAuth() {
+    const container = document.getElementById("nav-auth-container");
+    if (!container) return;
+
+    if (currentUser) {
+        const initial = (currentUser.name || currentUser.email || "U").charAt(0).toUpperCase();
+        const displayName = currentUser.name || currentUser.email.split("@")[0];
+        container.innerHTML = `
+            <div class="user-profile-badge" title="${escapeHtml(currentUser.email)}">
+                <div class="user-avatar-circle">${escapeHtml(initial)}</div>
+                <span style="font-weight: 600; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(displayName)}</span>
+                <span class="unlimited-badge-pill">UNLIMITED</span>
+                <button type="button" class="btn-nav-logout" onclick="confirmLogout()" title="Log Out">Log Out</button>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <a href="/login" class="auth-nav-btn btn-nav-login">Sign In</a>
+            <a href="/register" class="auth-nav-btn btn-nav-register">Create Account</a>
+        `;
+    }
+}
+
+function updateQuotaUI(quotaData) {
+    if (quotaData) currentQuota = quotaData;
+
+    const textEl = document.getElementById("quota-status-text");
+    const quotaLink = document.querySelector(".quota-link");
+
+    if (currentUser || currentQuota.is_unlimited) {
+        if (textEl) {
+            textEl.innerHTML = `<strong style="color: var(--neon-emerald);">Unlimited Scans Active</strong> • Logged in as ${escapeHtml(currentUser ? currentUser.email : 'Member')}`;
+        }
+        if (quotaLink) {
+            quotaLink.innerText = "Member Access";
+            quotaLink.style.color = "var(--neon-emerald)";
+            quotaLink.onclick = function() {
+                alert("You have Unlimited Scans as a registered WebShield AI member.");
+            };
+        }
+    } else {
+        const remaining = typeof currentQuota.remaining === 'number' ? currentQuota.remaining : 2;
+        if (textEl) {
+            if (remaining > 1) {
+                textEl.innerHTML = `<span style="color: var(--neon-cyan); font-weight: 700;">${remaining} free scans</span> available today`;
+            } else if (remaining === 1) {
+                textEl.innerHTML = `<span style="color: var(--neon-amber); font-weight: 700;">1 free scan</span> remaining`;
+            } else {
+                textEl.innerHTML = `<span style="color: var(--neon-crimson); font-weight: 700;">0 free scans remaining</span> (Limit reached)`;
+            }
+        }
+        if (quotaLink) {
+            quotaLink.innerText = "Get unlimited →";
+            quotaLink.style.color = "";
+            quotaLink.onclick = function() {
+                openLimitModal();
+            };
+        }
+    }
+}
+
+async function handleLogout() {
+    try {
+        const token = getAuthToken();
+        await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: { "Authorization": token ? `Bearer ${token}` : "" }
+        });
+    } catch (e) {}
+
+    localStorage.removeItem("webshield_auth_token");
+    localStorage.removeItem("webshield_user");
+    document.cookie = "webshield_session=; path=/; max-age=0";
+    currentUser = null;
+    initAuthAndQuota();
+}
+
+function openLimitModal(customTitle, customDesc) {
+    const modal = document.getElementById("limit-modal");
+    if (!modal) return;
+    const titleEl = document.getElementById("limit-modal-title");
+    const descEl = document.getElementById("limit-modal-desc");
+    if (titleEl) {
+        titleEl.innerText = customTitle || "Your free credits are over";
+    }
+    if (descEl && customDesc) {
+        descEl.innerHTML = customDesc;
+    }
+    modal.classList.add("active");
+}
+
+function closeLimitModal() {
+    const modal = document.getElementById("limit-modal");
+    if (modal) modal.classList.remove("active");
+}
+
 function openUnlimitedNotice() {
-    alert("🎉 WebShield AI Community Edition: You have Unlimited Free Scans for educational and authorized defensive testing!");
+    if (currentUser) {
+        alert("You have Unlimited Scans as an active WebShield AI member.");
+    } else {
+        openLimitModal("Your free credits are over");
+    }
 }
 
 function showThreatIntelModal() {
@@ -825,3 +1012,593 @@ function escapeHtml(str) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
+
+
+
+function confirmClearChat() {
+    showConfirmModal({
+        title: "Clear Advisor Conversation?",
+        message: "All previous questions and security recommendations in this session will be cleared.",
+        confirmText: "Clear Conversation",
+        cancelText: "Keep Chat",
+        onConfirm: () => {
+            clearChatHistory();
+            showToastNotification("Advisor conversation cleared.");
+        }
+    });
+}
+
+function confirmLogout() {
+    showConfirmModal({
+        title: "Sign Out of WebShield AI?",
+        message: "Are you sure you want to end your active member session?",
+        confirmText: "Sign Out",
+        cancelText: "Stay Signed In",
+        onConfirm: () => {
+            handleLogout();
+        }
+    });
+}
+
+
+/**
+ * WebShield AI - Comprehensive 20 Features Engine
+ * Integrates seamlessly with existing scanner engine without breaking any existing functionality.
+ */
+
+// --------------------------------------------------------------------------
+// 1. Theme Engine: Light/Dark Theme Switcher with LocalStorage
+// --------------------------------------------------------------------------
+function initTheme() {
+    const savedTheme = localStorage.getItem('webshield_theme');
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    const theme = savedTheme ? savedTheme : (prefersLight ? 'light' : 'dark');
+    applyTheme(theme);
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('webshield_theme', theme);
+    updateThemeIcons(theme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(nextTheme);
+}
+
+function updateThemeIcons(theme) {
+    const iconSVGs = {
+        sun: `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`,
+        moon: `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`
+    };
+
+    document.querySelectorAll('.theme-toggle-icon').forEach(iconEl => {
+        // In light theme show moon to switch to dark; in dark theme show sun to switch to light
+        iconEl.innerHTML = theme === 'light' ? iconSVGs.moon : iconSVGs.sun;
+    });
+
+    document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+        btn.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} mode`);
+        btn.setAttribute('title', `Switch to ${theme === 'light' ? 'dark' : 'light'} mode`);
+    });
+}
+
+// --------------------------------------------------------------------------
+// 2. Scroll Progress Bar
+// --------------------------------------------------------------------------
+function initScrollProgress() {
+    const progressBar = document.getElementById('scroll-progress-bar');
+    if (!progressBar) return;
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        progressBar.style.width = `${progress}%`;
+        progressBar.setAttribute('aria-valuenow', Math.round(progress));
+    }, { passive: true });
+}
+
+// --------------------------------------------------------------------------
+// 3. Sticky Header Scroll Elevation
+// --------------------------------------------------------------------------
+function initStickyHeader() {
+    const header = document.querySelector('.top-navbar');
+    if (!header) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }, { passive: true });
+}
+
+// --------------------------------------------------------------------------
+// 4. Back to Top Button
+// --------------------------------------------------------------------------
+function initBackToTop() {
+    const btn = document.getElementById('btn-back-to-top');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            btn.classList.add('visible');
+            btn.setAttribute('aria-hidden', 'false');
+        } else {
+            btn.classList.remove('visible');
+            btn.setAttribute('aria-hidden', 'true');
+        }
+    }, { passive: true });
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// --------------------------------------------------------------------------
+// 5. Mobile Navigation Menu
+// --------------------------------------------------------------------------
+function toggleMobileMenu(forceClose = false) {
+    const overlay = document.getElementById('mobile-drawer-overlay');
+    const toggleBtn = document.getElementById('btn-mobile-menu');
+    if (!overlay || !toggleBtn) return;
+
+    const isOpen = overlay.classList.contains('active');
+    const willOpen = forceClose ? false : !isOpen;
+
+    if (willOpen) {
+        overlay.classList.add('active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    } else {
+        overlay.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+}
+
+// --------------------------------------------------------------------------
+// 6. Universal Copy to Clipboard
+// --------------------------------------------------------------------------
+async function copyToClipboard(text, btnElement) {
+    if (!text) return;
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        if (btnElement) {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.classList.add('copied');
+            btnElement.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Copied!</span>
+            `;
+            setTimeout(() => {
+                btnElement.classList.remove('copied');
+                btnElement.innerHTML = originalHTML;
+            }, 2000);
+        }
+        showToastNotification("Copied to clipboard!");
+    } catch (err) {
+        showToastNotification("Unable to copy to clipboard.");
+    }
+}
+
+// Accessible Toast Notification
+function showToastNotification(msg) {
+    let toast = document.getElementById('webshield-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'webshield-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-surface-elevated, #131722);
+            color: var(--text-main, #fff);
+            border: 1px solid var(--neon-cyan, #00e5ff);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 10010;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: all 0.25s ease;
+            pointer-events: none;
+        `;
+        document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 2500);
+}
+
+// --------------------------------------------------------------------------
+// 7. Site Search Engine
+// --------------------------------------------------------------------------
+const SITE_SEARCH_INDEX = [
+    { title: "Basic Scan Profile", category: "SCANNER", desc: "Fast surface audit inspecting SSL/TLS, HSTS, CSP, and exposed headers.", target: "#scanner-card" },
+    { title: "Medium Scan Profile", category: "SCANNER", desc: "Interactive level-1 BFS crawl evaluating HTML forms, POST CSRF tokens, and auth endpoints.", target: "#scanner-card" },
+    { title: "Deep Scan Profile", category: "SCANNER", desc: "Exhaustive depth-2 BFS queue crawl checking cookie flags, hidden files, and full PDF export.", target: "#scanner-card" },
+    { title: "A01: Broken Access Control", category: "OWASP", desc: "Detection of exposed /admin endpoints, sensitive directories, and unauthorized routes.", target: "#owasp-card-A01" },
+    { title: "A02: Cryptographic Failures", category: "OWASP", desc: "SSL/TLS validation, Strict-Transport-Security (HSTS), and insecure HTTP transmissions.", target: "#owasp-card-A02" },
+    { title: "A03: Injection (SQL & XSS)", category: "OWASP", desc: "Cross-Site Scripting (XSS) input surface mapping and unvalidated form submission checks.", target: "#owasp-card-A03" },
+    { title: "A04: Insecure Design", category: "OWASP", desc: "Rate-limiting absence, bot credential-stuffing exposure, and missing security architecture.", target: "#owasp-card-A04" },
+    { title: "A05: Security Misconfiguration", category: "OWASP", desc: "Missing CSP, X-Frame-Options, X-Content-Type-Options nosniff, and default file leaks.", target: "#owasp-card-A05" },
+    { title: "A06: Vulnerable & Outdated Components", category: "OWASP", desc: "Exposed web server technology banners (Server, X-Powered-By) and known version vulnerabilities.", target: "#owasp-card-A06" },
+    { title: "A07: Identification & Auth Failures", category: "OWASP", desc: "Unencrypted login form submissions, missing password protection, and session cookie flags.", target: "#owasp-card-A07" },
+    { title: "A08: Software & Data Integrity Failures", category: "OWASP", desc: "Subresource Integrity (SRI) on external scripts and untrusted CDN imports.", target: "#owasp-card-A08" },
+    { title: "A09: Security Logging & Monitoring", category: "OWASP", desc: "Suspicious HTTP status code audits and missing threat detection telemetry.", target: "#owasp-card-A09" },
+    { title: "A10: Server-Side Request Forgery (SSRF)", category: "OWASP", desc: "Targeted outbound URL parameter checks and unauthorized internal network calls.", target: "#owasp-card-A10" },
+    { title: "Discovered Pages & Attack Surface", category: "PAGES", desc: "View all crawled site routes, depth hierarchy, and HTTP response codes.", target: "#attack-surface-section" },
+    { title: "Security Issues & Findings", category: "FINDINGS", desc: "Review severity-rated vulnerability cards, impacted endpoints, and remediation fixes.", target: "#findings-section" },
+    { title: "Privacy Policy", category: "LEGAL", desc: "Data protection standards, temporary scan cache retention, and user privacy rights.", target: "/privacy" },
+    { title: "Terms and Conditions", category: "LEGAL", desc: "Authorized scanning requirements, liability limitations, and permitted use.", target: "/terms" },
+    { title: "Frequently Asked Questions", category: "FAQ", desc: "Learn how the BFS engine works, scan permissions, and safety guarantees.", target: "#faq-section" }
+];
+
+let activeSearchFilter = "ALL";
+
+function openSiteSearch() {
+    const modal = document.getElementById('site-search-modal');
+    const input = document.getElementById('site-search-input');
+    if (!modal) return;
+    modal.classList.add('active');
+    if (input) {
+        input.value = "";
+        setTimeout(() => input.focus(), 50);
+        renderSearchResults("");
+    }
+}
+
+function closeSiteSearch() {
+    const modal = document.getElementById('site-search-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+function filterSearchCategory(category, btnElement) {
+    activeSearchFilter = category;
+    document.querySelectorAll('.search-filter-pill').forEach(btn => btn.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+    const input = document.getElementById('site-search-input');
+    renderSearchResults(input ? input.value : "");
+}
+
+function handleSiteSearchInput(e) {
+    renderSearchResults(e.target.value);
+}
+
+function renderSearchResults(query) {
+    const container = document.getElementById('search-results-container');
+    if (!container) return;
+
+    const trimmed = query.trim().toLowerCase();
+    const filtered = SITE_SEARCH_INDEX.filter(item => {
+        const matchesCategory = activeSearchFilter === "ALL" || item.category === activeSearchFilter;
+        if (!matchesCategory) return false;
+        if (!trimmed) return true;
+        return item.title.toLowerCase().includes(trimmed) || 
+               item.desc.toLowerCase().includes(trimmed) ||
+               item.category.toLowerCase().includes(trimmed);
+    });
+
+    if (!filtered.length) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 32px 16px; color: var(--text-dim);">
+                <div style="font-size: 1rem; margin-bottom: 4px;">No matches found for "${escapeHtml(query)}"</div>
+                <div style="font-size: 0.8rem;">Try searching for "OWASP", "CSP", "HSTS", or "Login"</div>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = filtered.map(item => `
+        <a href="${item.target}" class="search-result-item" onclick="onSearchResultClick('${item.target}', event)">
+            <div class="search-result-top">
+                <span class="search-result-title">${escapeHtml(item.title)}</span>
+                <span class="search-result-category">${escapeHtml(item.category)}</span>
+            </div>
+            <div class="search-result-desc">${escapeHtml(item.desc)}</div>
+        </a>
+    `).join('');
+}
+
+function onSearchResultClick(target, event) {
+    closeSiteSearch();
+    if (target.startsWith('#')) {
+        event.preventDefault();
+        const el = document.querySelector(target);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
+
+// --------------------------------------------------------------------------
+// 8. Cookie Consent & Preferences Management
+// --------------------------------------------------------------------------
+function initCookieConsent() {
+    const consent = localStorage.getItem('webshield_cookie_consent');
+    if (!consent) {
+        setTimeout(() => {
+            const banner = document.getElementById('cookie-banner');
+            if (banner) banner.classList.add('active');
+        }, 800);
+    } else {
+        try {
+            const parsed = JSON.parse(consent);
+            applyCookiePreferences(parsed);
+        } catch (e) {}
+    }
+}
+
+function acceptAllCookies() {
+    const preferences = { necessary: true, analytics: true, telemetry: true, timestamp: new Date().toISOString() };
+    saveConsent(preferences);
+}
+
+function rejectOptionalCookies() {
+    const preferences = { necessary: true, analytics: false, telemetry: false, timestamp: new Date().toISOString() };
+    saveConsent(preferences);
+}
+
+function saveConsent(preferences) {
+    localStorage.setItem('webshield_cookie_consent', JSON.stringify(preferences));
+    const banner = document.getElementById('cookie-banner');
+    if (banner) banner.classList.remove('active');
+    closeCookiePreferences();
+    applyCookiePreferences(preferences);
+    showToastNotification("Cookie preferences saved.");
+}
+
+function applyCookiePreferences(prefs) {
+    if (prefs.analytics) {
+        initUtmTracking(true);
+    }
+}
+
+function openCookiePreferences() {
+    const modal = document.getElementById('cookie-prefs-modal');
+    if (!modal) return;
+    const consent = localStorage.getItem('webshield_cookie_consent');
+    if (consent) {
+        try {
+            const parsed = JSON.parse(consent);
+            const analyticsInput = document.getElementById('cookie-pref-analytics');
+            const telemetryInput = document.getElementById('cookie-pref-telemetry');
+            if (analyticsInput) analyticsInput.checked = !!parsed.analytics;
+            if (telemetryInput) telemetryInput.checked = !!parsed.telemetry;
+        } catch (e) {}
+    }
+    modal.classList.add('active');
+}
+
+function closeCookiePreferences() {
+    const modal = document.getElementById('cookie-prefs-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+function saveCustomPreferences() {
+    const analytics = document.getElementById('cookie-pref-analytics')?.checked ?? false;
+    const telemetry = document.getElementById('cookie-pref-telemetry')?.checked ?? false;
+    saveConsent({ necessary: true, analytics, telemetry, timestamp: new Date().toISOString() });
+}
+
+// --------------------------------------------------------------------------
+// 9. UTM Parameter Attribution Tracking
+// --------------------------------------------------------------------------
+function initUtmTracking(consentGranted = false) {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+        const utmFound = {};
+        let hasUtm = false;
+
+        utmKeys.forEach(key => {
+            const val = urlParams.get(key);
+            if (val) {
+                utmFound[key] = val.trim();
+                hasUtm = true;
+            }
+        });
+
+        if (hasUtm) {
+            sessionStorage.setItem('webshield_utm', JSON.stringify(utmFound));
+        }
+    } catch (e) {}
+}
+
+function getStoredUtm() {
+    try {
+        const stored = sessionStorage.getItem('webshield_utm');
+        return stored ? JSON.parse(stored) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+// --------------------------------------------------------------------------
+// 10. Floating Contact Button & Security Disclosure Modal
+// --------------------------------------------------------------------------
+function openContactModal() {
+    const modal = document.getElementById('contact-modal');
+    if (modal) modal.classList.add('active');
+}
+
+function closeContactModal() {
+    const modal = document.getElementById('contact-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+async function handleContactSubmit(e) {
+    e.preventDefault();
+    const nameInput = document.getElementById('contact-name');
+    const emailInput = document.getElementById('contact-email');
+    const subjectInput = document.getElementById('contact-subject');
+    const messageInput = document.getElementById('contact-message');
+    const urlInput = document.getElementById('contact-target-url');
+    const submitBtn = document.getElementById('contact-btn-submit');
+    const alertBox = document.getElementById('contact-alert-box');
+
+    const email = emailInput?.value.trim() || "";
+    const message = messageInput?.value.trim() || "";
+
+    // Clear previous errors
+    emailInput?.classList.remove('is-invalid');
+    messageInput?.classList.remove('is-invalid');
+    if (alertBox) alertBox.style.display = 'none';
+
+    if (!email || !email.includes('@')) {
+        emailInput?.classList.add('is-invalid');
+        emailInput?.focus();
+        showContactAlert('error', 'Please enter a valid email address.');
+        return;
+    }
+
+    if (!message || message.length < 5) {
+        messageInput?.classList.add('is-invalid');
+        messageInput?.focus();
+        showContactAlert('error', 'Please write a message of at least 5 characters.');
+        return;
+    }
+
+    const utm = getStoredUtm();
+    const payload = {
+        name: nameInput?.value.trim() || "",
+        email: email,
+        subject: subjectInput?.value || "General Inquiry",
+        message: message,
+        target_url: urlInput?.value.trim() || "",
+        utm_source: utm.utm_source || "",
+        utm_medium: utm.utm_medium || ""
+    };
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="spinner-inline" style="margin-right: 6px;"></span> Sending...`;
+    }
+
+    try {
+        const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+            showContactAlert('success', data.message || `Message received. Reference ID: ${data.reference_id}`);
+            // Reset fields
+            if (messageInput) messageInput.value = "";
+            if (urlInput) urlInput.value = "";
+            setTimeout(() => {
+                closeContactModal();
+                if (alertBox) alertBox.style.display = 'none';
+            }, 3000);
+        } else {
+            showContactAlert('error', data.message || 'Error sending message. Please try again.');
+        }
+    } catch (err) {
+        showContactAlert('error', 'Network error. Could not contact the server.');
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Send Message';
+        }
+    }
+}
+
+function showContactAlert(type, msg) {
+    const box = document.getElementById('contact-alert-box');
+    if (!box) return;
+    box.className = type === 'success' ? 'form-success-banner' : 'form-error-text';
+    box.innerText = msg;
+    box.style.display = 'block';
+}
+
+// --------------------------------------------------------------------------
+// 11. Confirmation Modal for Destructive Actions
+// --------------------------------------------------------------------------
+let confirmCallback = null;
+
+function showConfirmModal({ title, message, confirmText = "Confirm", cancelText = "Cancel", onConfirm }) {
+    const modal = document.getElementById('confirm-modal');
+    const titleEl = document.getElementById('confirm-modal-title');
+    const descEl = document.getElementById('confirm-modal-desc');
+    const confirmBtn = document.getElementById('confirm-modal-btn');
+    const cancelBtn = document.getElementById('confirm-modal-cancel');
+
+    if (!modal) return;
+    if (titleEl) titleEl.innerText = title;
+    if (descEl) descEl.innerText = message;
+    if (confirmBtn) confirmBtn.innerText = confirmText;
+    if (cancelBtn) cancelBtn.innerText = cancelText;
+
+    confirmCallback = onConfirm;
+    modal.classList.add('active');
+    setTimeout(() => confirmBtn?.focus(), 50);
+}
+
+function closeConfirmModal() {
+    const modal = document.getElementById('confirm-modal');
+    if (modal) modal.classList.remove('active');
+    confirmCallback = null;
+}
+
+function executeConfirmAction() {
+    if (typeof confirmCallback === 'function') {
+        confirmCallback();
+    }
+    closeConfirmModal();
+}
+
+// --------------------------------------------------------------------------
+// Global Keyboard Shortcut Listeners
+// --------------------------------------------------------------------------
+document.addEventListener('keydown', (e) => {
+    // Ctrl+K or / opens site search
+    if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName))) {
+        e.preventDefault();
+        openSiteSearch();
+    }
+    // Escape closes modals
+    if (e.key === 'Escape') {
+        closeSiteSearch();
+        closeContactModal();
+        closeConfirmModal();
+        closeCookiePreferences();
+        toggleMobileMenu(true);
+    }
+});
+
+// Run initializers
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    initScrollProgress();
+    initStickyHeader();
+    initBackToTop();
+    initCookieConsent();
+    initUtmTracking();
+});

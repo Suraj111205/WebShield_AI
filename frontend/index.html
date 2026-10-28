@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebShield AI — Security Advisor & Vulnerability Scanner</title>
+    <title>WebShield AI - Security Advisor & Vulnerability Scanner</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta name="description" content="WebShield AI is a simple, easy-to-use website vulnerability scanner and friendly security advisor that finds security weaknesses and shows you how to fix them.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,8 +41,8 @@
   --neon-crimson-glow: rgba(255, 23, 68, 0.25);
   --neon-amber: #ffab00;
   --neon-amber-glow: rgba(255, 171, 0, 0.22);
-  --neon-purple: #9d4edd;
-  --neon-purple-glow: rgba(157, 78, 221, 0.25);
+  --neon-purple: #00b0ff;
+  --neon-purple-glow: rgba(0, 176, 255, 0.25);
 
   /* Typography */
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -54,7 +55,7 @@
 
   /* Gradients */
   --grad-hero: radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.08) 0%, rgba(7, 8, 12, 0) 70%);
-  --grad-brand: linear-gradient(135deg, #00e5ff 0%, #7c4dff 100%);
+  --grad-brand: linear-gradient(135deg, #00e5ff 0%, #0070f3 100%);
   --grad-danger: linear-gradient(135deg, #ff1744 0%, #ff5252 100%);
   --grad-success: linear-gradient(135deg, #00e676 0%, #00b0ff 100%);
 
@@ -220,7 +221,7 @@ body {
   padding: 6px 14px;
   background: rgba(0, 230, 118, 0.08);
   border: 1px solid rgba(0, 230, 118, 0.25);
-  border-radius: 50px;
+  border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--neon-emerald);
@@ -247,7 +248,7 @@ body {
   border: 1px solid rgba(124, 77, 255, 0.4);
   color: #fff;
   padding: 8px 16px;
-  border-radius: 50px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   display: flex;
@@ -279,7 +280,7 @@ body {
   padding: 6px 16px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-medium);
-  border-radius: 50px;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--neon-cyan);
@@ -297,7 +298,7 @@ body {
 }
 
 .hero-title span.gradient-text {
-  background: linear-gradient(135deg, #ffffff 10%, #00e5ff 70%, #7c4dff 100%);
+  background: linear-gradient(135deg, #ffffff 10%, #00e5ff 70%, #0070f3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -334,7 +335,7 @@ body {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--neon-cyan) 50%, var(--neon-purple) 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--neon-cyan) 50%, #00b0ff 80%, transparent 100%);
 }
 
 .deck-header {
@@ -600,7 +601,7 @@ body {
 }
 
 .btn-launch-scan {
-  background: linear-gradient(135deg, #00e5ff 0%, #00b0ff 50%, #7c4dff 100%);
+  background: linear-gradient(135deg, #00e5ff 0%, #00b0ff 50%, #0070f3 100%);
   border: none;
   color: #07080c;
   font-family: var(--font-sans);
@@ -975,7 +976,7 @@ body {
   font-size: 0.8rem;
   font-weight: 600;
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: 8px;
   cursor: pointer;
   transition: var(--transition);
 }
@@ -1372,7 +1373,7 @@ body {
   color: var(--text-muted);
   font-size: 0.72rem;
   padding: 4px 10px;
-  border-radius: 50px;
+  border-radius: 8px;
   cursor: pointer;
   transition: var(--transition);
 }
@@ -1542,7 +1543,7 @@ body {
   font-size: 0.8rem;
   font-weight: 700;
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: 6px;
   width: fit-content;
   margin-bottom: 24px;
 }
@@ -1917,7 +1918,7 @@ body {
   z-index: 999;
   background: #12141e;
   border: 1px solid rgba(255, 51, 102, 0.5);
-  border-radius: 50px;
+  border-radius: 8px;
   padding: 8px 18px 8px 10px;
   display: flex;
   align-items: center;
@@ -1977,7 +1978,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #8b95b0;
   padding: 8px 16px;
-  border-radius: 50px;
+  border-radius: 8px;
   font-family: var(--font-sans);
   font-size: 0.82rem;
   font-weight: 700;
@@ -2176,6 +2177,1250 @@ body {
   50% { opacity: 0.4; transform: scale(1.25); }
 }
 
+/* ==========================================================================
+   User Authentication & Quota System Styles
+   ========================================================================== */
+.auth-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.btn-nav-login {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-medium);
+}
+.btn-nav-login:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: var(--border-bright);
+  color: var(--neon-cyan);
+}
+.btn-nav-register {
+  color: #07080c;
+  background: var(--grad-brand);
+  border: 1px solid transparent;
+  font-weight: 700;
+}
+.btn-nav-register:hover {
+  box-shadow: 0 0 16px var(--neon-cyan-glow);
+  transform: translateY(-1px);
+}
+.user-profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(18, 22, 34, 0.85);
+  border: 1px solid var(--border-bright);
+  border-radius: 8px;
+  padding: 4px 12px 4px 6px;
+  font-size: 0.82rem;
+}
+.user-avatar-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--grad-brand);
+  color: #07080c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.72rem;
+}
+.unlimited-badge-pill {
+  background: rgba(0, 230, 118, 0.15);
+  color: var(--neon-emerald);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.btn-nav-logout {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: color 0.2s;
+  font-family: inherit;
+}
+.btn-nav-logout:hover {
+  color: var(--neon-crimson);
+}
+
+/* Limit Reached Modal */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(7, 8, 12, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.auth-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.auth-modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-bright);
+  border-radius: 20px;
+  max-width: 480px;
+  width: 100%;
+  padding: 36px 30px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px var(--neon-cyan-glow);
+  position: relative;
+  transform: scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.auth-modal-overlay.active .auth-modal-box {
+  transform: scale(1);
+}
+.auth-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.auth-modal-close:hover {
+  color: var(--text-main);
+}
+.auth-modal-icon-badge {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 16px;
+  background: rgba(255, 23, 68, 0.12);
+  border: 1px solid rgba(255, 23, 68, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  color: var(--neon-crimson);
+  box-shadow: 0 0 20px rgba(255, 23, 68, 0.2);
+}
+.auth-modal-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+.auth-modal-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+.auth-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.btn-modal-primary {
+  display: block;
+  background: var(--grad-brand);
+  color: #07080c;
+  font-weight: 700;
+  padding: 13px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+.btn-modal-primary:hover {
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4);
+  transform: translateY(-1px);
+}
+.btn-modal-secondary {
+  display: block;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-medium);
+  color: var(--text-main);
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: var(--transition);
+}
+.btn-modal-secondary:hover {
+  border-color: var(--border-bright);
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--neon-cyan);
+}
+.auth-modal-footer-note {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   20 Enhanced Website Features: Theme Engine, Accessibility, Search, Modals,
+   Print Styles, Mobile Drawer, Cookie Consent, FAQ, and Interaction States
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Engine: Light Theme Variables & Mode Transition
+   -------------------------------------------------------------------------- */
+[data-theme="light"] {
+  --bg-core: #f6f8fc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #edf2f9;
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --bg-card-hover: #ffffff;
+  --bg-input: #f8fafc;
+
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-medium: rgba(15, 23, 42, 0.16);
+  --border-bright: rgba(0, 112, 243, 0.35);
+  --border-focus: #0070f3;
+
+  --neon-cyan: #0070f3;
+  --neon-cyan-glow: rgba(0, 112, 243, 0.18);
+  --neon-emerald: #059669;
+  --neon-emerald-glow: rgba(5, 150, 105, 0.16);
+  --neon-crimson: #dc2626;
+  --neon-crimson-glow: rgba(220, 38, 38, 0.16);
+  --neon-amber: #d97706;
+  --neon-amber-glow: rgba(217, 119, 6, 0.16);
+  --neon-purple: #00b0ff;
+  --neon-purple-glow: rgba(0, 176, 255, 0.18);
+
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+
+  --grad-hero: radial-gradient(circle at 50% 0%, rgba(0, 112, 243, 0.06) 0%, rgba(246, 248, 252, 0) 70%);
+  --grad-brand: linear-gradient(135deg, #0070f3 0%, #00b0ff 100%);
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.06);
+  --shadow-glow: 0 0 20px rgba(0, 112, 243, 0.12);
+}
+
+[data-theme="light"] body {
+  background-color: var(--bg-core);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 112, 243, 0.05) 0%, transparent 60%),
+    linear-gradient(to bottom, #f6f8fc, #edf2f9);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .top-navbar {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid var(--border-medium);
+}
+
+[data-theme="light"] .brand-title {
+  background: linear-gradient(90deg, #0f172a 40%, var(--neon-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .brand-icon-wrap {
+  background: rgba(0, 112, 243, 0.1);
+  border-color: rgba(0, 112, 243, 0.3);
+  color: var(--neon-cyan);
+}
+
+[data-theme="light"] .hero-main-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .hero-gradient-highlight {
+  background: linear-gradient(135deg, #0f172a 20%, #0070f3 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .terminal-window {
+  background: #0d1117;
+  border-color: var(--border-medium);
+}
+
+[data-theme="light"] .terminal-body {
+  color: #c9d1d9;
+}
+
+[data-theme="light"] .search-modal-box,
+[data-theme="light"] .contact-modal-box,
+[data-theme="light"] .cookie-modal-box,
+[data-theme="light"] .confirm-modal-box,
+[data-theme="light"] .auth-modal-box,
+[data-theme="light"] .cookie-banner,
+[data-theme="light"] .mobile-nav-drawer,
+[data-theme="light"] .ai-drawer {
+  background: #ffffff;
+  color: var(--text-main);
+  border-color: var(--border-medium);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="light"] .data-table tbody tr:hover {
+  background: rgba(0, 112, 243, 0.04);
+}
+
+/* --------------------------------------------------------------------------
+   2. Scroll Progress Bar
+   -------------------------------------------------------------------------- */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-cyan), #00b0ff);
+  box-shadow: 0 0 10px var(--neon-cyan-glow);
+  z-index: 10005;
+  transition: width 0.08s ease-out;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. Skip to Main Content Link
+   -------------------------------------------------------------------------- */
+.skip-to-content-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--bg-surface-elevated);
+  color: var(--neon-cyan);
+  border: 1px solid var(--border-bright);
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  z-index: 99999;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: top 0.2s ease-in-out;
+}
+.skip-to-content-link:focus {
+  top: 14px;
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Sticky Header Elevation
+   -------------------------------------------------------------------------- */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+.top-navbar.scrolled {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  border-bottom-color: var(--border-bright);
+}
+
+/* --------------------------------------------------------------------------
+   5. Nav Icon Buttons (Theme Switcher & Search Trigger)
+   -------------------------------------------------------------------------- */
+.nav-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-medium);
+  color: var(--text-muted);
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+.nav-icon-btn:hover {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: var(--border-bright);
+  color: var(--neon-cyan);
+  transform: translateY(-1px);
+}
+.nav-icon-btn:active {
+  transform: translateY(1px);
+}
+.search-kbd-hint {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-dim);
+}
+
+/* --------------------------------------------------------------------------
+   6. Mobile Hamburger Button & Drawer Menu
+   -------------------------------------------------------------------------- */
+.btn-mobile-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-medium);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px;
+  gap: 5px;
+  transition: var(--transition);
+}
+.btn-mobile-hamburger:hover {
+  border-color: var(--border-bright);
+}
+.hamburger-bar {
+  width: 22px;
+  height: 2px;
+  background: var(--text-main);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.btn-mobile-hamburger[aria-expanded="true"] .hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.btn-mobile-hamburger[aria-expanded="true"] .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+.btn-mobile-hamburger[aria-expanded="true"] .hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.mobile-drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  background: var(--bg-surface-elevated);
+  border-left: 1px solid var(--border-medium);
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  overflow-y: auto;
+}
+.mobile-drawer-overlay.active .mobile-nav-drawer {
+  transform: translateX(0);
+}
+.mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 20px;
+}
+.mobile-drawer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mobile-drawer-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  color: var(--text-main);
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+.mobile-drawer-link:hover {
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--neon-cyan);
+}
+.mobile-drawer-actions {
+  margin-top: auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    display: none;
+  }
+  .btn-mobile-hamburger {
+    display: flex;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Back to Top Button
+   -------------------------------------------------------------------------- */
+.btn-back-to-top {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-bright);
+  color: var(--neon-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+  z-index: 850;
+}
+.btn-back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.btn-back-to-top:hover {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--neon-cyan);
+  transform: translateY(-2px);
+}
+.btn-back-to-top:active {
+  transform: translateY(1px);
+}
+
+/* --------------------------------------------------------------------------
+   8. Floating Contact Button
+   -------------------------------------------------------------------------- */
+.floating-contact-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 240px;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-bright);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: var(--transition);
+  z-index: 840;
+}
+.floating-contact-btn:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  transform: translateY(-2px);
+}
+.floating-contact-btn:active {
+  transform: translateY(1px);
+}
+@media (max-width: 768px) {
+  .floating-contact-btn {
+    right: 24px;
+    bottom: 84px;
+  }
+  .btn-back-to-top {
+    bottom: 140px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. Universal Copy Buttons & Code Blocks
+   -------------------------------------------------------------------------- */
+.copy-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-copy-code {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-medium);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition);
+}
+.btn-copy-code:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: var(--border-bright);
+  color: var(--neon-cyan);
+}
+.btn-copy-code.copied {
+  background: rgba(0, 230, 118, 0.15);
+  border-color: var(--neon-emerald);
+  color: var(--neon-emerald);
+}
+
+/* --------------------------------------------------------------------------
+   10. Expandable FAQ Section
+   -------------------------------------------------------------------------- */
+.faq-section {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-subtle);
+}
+.faq-header-center {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 40px;
+}
+.faq-main-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.faq-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+.faq-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.faq-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+.faq-card:hover {
+  border-color: var(--border-bright);
+  background: var(--bg-card-hover);
+}
+.faq-card[open] {
+  border-color: var(--border-bright);
+  background: var(--bg-card-hover);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+.faq-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  color: var(--text-main);
+  transition: color 0.2s ease;
+}
+.faq-summary::-webkit-details-marker {
+  display: none;
+}
+.faq-summary:hover {
+  color: var(--neon-cyan);
+}
+.faq-chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--text-dim);
+  transition: transform 0.25s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+.faq-card[open] .faq-chevron {
+  transform: rotate(180deg);
+  color: var(--neon-cyan);
+}
+.faq-answer {
+  padding: 0 22px 20px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   11. Cookie Consent Banner & Preferences Modal
+   -------------------------------------------------------------------------- */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-surface-elevated);
+  border-top: 1px solid var(--border-bright);
+  padding: 18px 24px;
+  z-index: 950;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, visibility 0.35s ease;
+}
+.cookie-banner.active {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+.cookie-content {
+  flex: 1;
+  min-width: 280px;
+}
+.cookie-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+.cookie-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.cookie-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-cookie-accept {
+  background: var(--grad-brand);
+  color: #07080c;
+  border: none;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+.btn-cookie-accept:hover {
+  box-shadow: 0 0 14px var(--neon-cyan-glow);
+  transform: translateY(-1px);
+}
+.btn-cookie-reject {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-medium);
+  color: var(--text-main);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+.btn-cookie-reject:hover {
+  border-color: var(--border-bright);
+}
+.btn-cookie-prefs {
+  background: transparent;
+  border: none;
+  color: var(--neon-cyan);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 6px 8px;
+}
+
+/* --------------------------------------------------------------------------
+   12. Site Search Modal
+   -------------------------------------------------------------------------- */
+.search-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80px 16px 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.search-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.search-modal-box {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-bright);
+  border-radius: 10px;
+  width: 640px;
+  max-width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.search-modal-overlay.active .search-modal-box {
+  transform: scale(1);
+}
+.search-bar-wrap {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-medium);
+  gap: 12px;
+}
+.search-input-field {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-size: 1.05rem;
+  font-family: inherit;
+}
+.search-filter-pills {
+  display: flex;
+  gap: 8px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(0, 0, 0, 0.15);
+  overflow-x: auto;
+}
+.search-filter-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-medium);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.search-filter-pill.active {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+.search-results-list {
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+.search-result-item {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.search-result-item:hover,
+.search-result-item.selected {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: var(--border-bright);
+}
+.search-result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.search-result-title {
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.search-result-category {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  color: var(--neon-cyan);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.search-result-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.search-footer-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   13. Contact & Security Disclosure Modal
+   -------------------------------------------------------------------------- */
+.contact-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.contact-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.contact-modal-box {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-bright);
+  border-radius: 10px;
+  width: 580px;
+  max-width: 100%;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  transform: scale(0.96);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.contact-modal-overlay.active .contact-modal-box {
+  transform: scale(1);
+}
+.contact-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-medium);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.contact-modal-close:hover {
+  color: #fff;
+  border-color: var(--border-bright);
+}
+
+/* --------------------------------------------------------------------------
+   14. Confirmation Modal
+   -------------------------------------------------------------------------- */
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.confirm-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.confirm-modal-box {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-bright);
+  border-radius: 10px;
+  width: 440px;
+  max-width: 100%;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  transform: scale(0.95);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.confirm-modal-overlay.active .confirm-modal-box {
+  transform: scale(1);
+}
+.confirm-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+.confirm-modal-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.confirm-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   15. Interactive Hover & Focus Accessibility States
+   -------------------------------------------------------------------------- */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 2px;
+}
+button, a {
+  transition: var(--transition);
+}
+.btn-scanner-launch:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.35);
+}
+.btn-scanner-launch:active {
+  transform: translateY(1px);
+}
+.metric-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+}
+.owasp-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   16. Form Validation & Error States
+   -------------------------------------------------------------------------- */
+.form-input.is-invalid,
+input[aria-invalid="true"] {
+  border-color: var(--neon-crimson) !important;
+  box-shadow: 0 0 0 2px var(--neon-crimson-glow) !important;
+}
+.form-error-text {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--neon-crimson);
+  margin-top: 4px;
+}
+.form-success-banner {
+  background: rgba(0, 230, 118, 0.1);
+  border: 1px solid var(--neon-emerald);
+  color: var(--neon-emerald);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   17. Loading Indicator Animations
+   -------------------------------------------------------------------------- */
+.spinner-inline {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--neon-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.typing-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 10px;
+}
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--neon-cyan);
+  border-radius: 50%;
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   18. Last Updated Metadata Badge
+   -------------------------------------------------------------------------- */
+.last-updated-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+}
+.last-updated-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--neon-cyan);
+  border-radius: 50%;
+}
+
+/* --------------------------------------------------------------------------
+   19. Print Stylesheet
+   -------------------------------------------------------------------------- */
+@media print {
+  *, *::before, *::after {
+    background: transparent !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+  .top-navbar,
+  .mobile-nav-drawer,
+  .mobile-drawer-overlay,
+  .btn-back-to-top,
+  .floating-contact-btn,
+  .floating-chatbot-btn,
+  .cookie-banner,
+  .search-modal-overlay,
+  .contact-modal-overlay,
+  .confirm-modal-overlay,
+  .auth-modal-overlay,
+  .ai-drawer-overlay,
+  .scanner-card-tabs,
+  .hero-quick-links-row,
+  .btn-scanner-launch,
+  .btn-ai-drawer-trigger,
+  .live-pulse-badge,
+  .scroll-progress-bar {
+    display: none !important;
+  }
+  .app-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .metric-card,
+  .owasp-card,
+  .vuln-finding-card,
+  .faq-card {
+    border: 1px solid #cccccc !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 12px !important;
+  }
+  .faq-answer {
+    display: block !important;
+  }
+  details {
+    display: block !important;
+  }
+  details[open] summary,
+  details summary {
+    display: block !important;
+    font-weight: bold;
+  }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 80%;
+  }
+  a[href^="#"]::after,
+  a[href^="javascript"]::after {
+    content: "";
+  }
+}
+
     </style>
 </head>
 <body>
@@ -2199,22 +3444,54 @@ body {
                 <li><a href="#scanner-card" class="nav-link">Website Scanner</a></li>
                 <li><a href="#attack-surface-section" class="nav-link">Discovered Pages</a></li>
                 <li><a href="#findings-section" class="nav-link">Security Issues</a></li>
-                <li><a href="#owasp-section" class="nav-link" style="color: var(--neon-cyan);">🏆 OWASP Top 10</a></li>
+                <li><a href="#owasp-section" class="nav-link" style="color: var(--neon-cyan);">OWASP Top 10</a></li>
             </ul>
 
-            <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <!-- 3. Site Search Trigger -->
+                <button id="btn-open-search" class="nav-icon-btn" onclick="openSiteSearch()" aria-label="Search website content (Ctrl+K)" title="Search (Ctrl+K)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span class="search-kbd-hint">Ctrl K</span>
+                </button>
+
+                <!-- 1. Dark / Light Mode Switcher -->
+                <button id="btn-theme-toggle" class="nav-icon-btn theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle light or dark theme" title="Toggle theme">
+                    <svg class="theme-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
                 <div class="live-pulse-badge">
                     <div class="live-pulse-dot"></div>
                     <span>AI ADVISOR ACTIVE</span>
                 </div>
                 <button id="btn-open-ai" class="btn-ai-drawer-trigger" onclick="toggleAIDrawer(true)">
-                    <span>✨ Ask Security Advisor</span>
+                    <span>Ask Security Advisor</span>
+                </button>
+                <div id="nav-auth-container" style="display: flex; align-items: center; gap: 10px;"></div>
+
+                <!-- 5. Mobile Menu Toggle Button -->
+                <button id="btn-mobile-menu" class="btn-mobile-hamburger" onclick="toggleMobileMenu()" aria-expanded="false" aria-controls="mobile-nav-drawer" aria-label="Toggle navigation menu">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="app-container">
+    <main class="app-container" id="main-content" tabindex="-1">
 
         <!-- Two-Column Hero Layout -->
         <section class="hero-two-column-grid">
@@ -2222,7 +3499,7 @@ body {
             <!-- Left Hero Column -->
             <div class="hero-left-col">
                 <div class="scanner-badge-pill">
-                    <span>🐞 Free Website Security Scanner</span>
+                    <span>Website Security Scanner</span>
                 </div>
 
                 <h1 class="hero-main-title">
@@ -2232,54 +3509,54 @@ body {
                 </h1>
 
                 <p class="hero-explainer-p">
-                    WebShield AI scans your website for over <strong>50 common security problems</strong> — including SQL injection, XSS, broken logins, and more. No security experience needed. We explain every issue in plain English and tell you exactly how to fix it.
+                    WebShield AI audits web applications for critical vulnerabilities including SQL injection, cross-site scripting (XSS), misconfigured security headers, and exposed endpoints. Review findings with severity scoring and concrete remediation guidance.
                 </p>
 
                 <!-- 3 Checklist Items -->
                 <div class="hero-checklist-group">
                     <div class="checklist-item">
-                        <div class="check-icon-circle">✓</div>
+                        <div class="check-icon-circle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                         <span>No account required to scan</span>
                     </div>
                     <div class="checklist-item">
-                        <div class="check-icon-circle">✓</div>
+                        <div class="check-icon-circle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                         <span>Results explained in simple English</span>
                     </div>
                     <div class="checklist-item">
-                        <div class="check-icon-circle">✓</div>
+                        <div class="check-icon-circle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
                         <span>Step-by-step fix instructions</span>
                     </div>
                 </div>
 
-                <!-- Animated Metrics Counter Strip -->
+                <!-- Verified Capabilities Strip -->
                 <div class="hero-metrics-strip">
                     <div class="metric-strip-item">
-                        <h4 id="hero-stat-scans">1,250+</h4>
-                        <p>Scans run so far</p>
+                        <h4>OWASP Top 10</h4>
+                        <p>Standardized Mapping</p>
                     </div>
                     <div class="metric-strip-item">
-                        <h4 id="hero-stat-vulns">15+</h4>
-                        <p>Vulnerability types checked</p>
+                        <h4>15+</h4>
+                        <p>Security Checks</p>
                     </div>
                     <div class="metric-strip-item">
-                        <h4>Free</h4>
-                        <p>Always & forever</p>
+                        <h4>3 Profiles</h4>
+                        <p>Surface to Deep BFS</p>
                     </div>
                 </div>
 
                 <!-- Quick Action Links -->
                 <div class="hero-quick-links-row">
                     <a href="javascript:void(0)" class="hero-quick-link" onclick="fillTarget('example.com'); launchCardScan();">
-                        <span>📄 See a sample report</span>
+                        <span>See a sample report</span>
                     </a>
                     <a href="#owasp-section" class="hero-quick-link" onclick="scrollToSection('owasp-section')">
-                        <span>⚡ What is OWASP Top 10?</span>
+                        <span>What is OWASP Top 10?</span>
                     </a>
                     <a href="javascript:void(0)" class="hero-quick-link" onclick="showThreatIntelModal()">
-                        <span>📈 Live threat intelligence</span>
+                        <span>Threat Intelligence</span>
                     </a>
                     <a href="javascript:void(0)" class="hero-quick-link" onclick="toggleAIDrawer(true)">
-                        <span>🤖 Ask our AI security advisor</span>
+                        <span>Ask Security Advisor</span>
                     </a>
                 </div>
             </div>
@@ -2306,10 +3583,10 @@ body {
                 <!-- Active Mode Summary Box -->
                 <div class="active-mode-summary-box">
                     <div class="active-mode-title">
-                        <span>🔍</span>
+                        <span style="font-size:0.85rem; font-weight:700;">SCAN</span>
                         <span id="scan-mode-name">Basic Scan</span>
                     </div>
-                    <p class="active-mode-desc" id="scan-mode-desc">A quick surface check — great for beginners.</p>
+                    <p class="active-mode-desc" id="scan-mode-desc">A quick surface check - great for beginners.</p>
                 </div>
 
                 <!-- What We Check Dynamic List -->
@@ -2320,7 +3597,7 @@ body {
 
                 <!-- Target Input Box: Clean Empty Starting State -->
                 <label class="url-input-title-label" for="card-target-url">YOUR WEBSITE URL</label>
-                <div class="card-url-input-wrap">
+                <div class="card-url-input-wrap" style="position: relative; display: flex; align-items: center;">
                     <input 
                         type="text" 
                         id="card-target-url" 
@@ -2329,7 +3606,11 @@ body {
                         value=""
                         spellcheck="false" 
                         autocomplete="off"
+                        style="padding-right: 42px;"
                     >
+                    <button type="button" class="btn-copy-code" onclick="copyToClipboard(document.getElementById('card-target-url').value, this)" style="position: absolute; right: 8px; height: 30px;" aria-label="Copy target URL" title="Copy URL">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
                 </div>
 
                 <!-- Quick Clickable Sample Chips -->
@@ -2462,7 +3743,7 @@ body {
                 <div class="metric-card">
                     <div class="metric-header">
                         <span class="metric-title">Website Status</span>
-                        <div class="metric-icon-pill">🌐</div>
+                        <div class="metric-icon-pill" style="font-size:0.75rem; font-weight:700;">HTTP</div>
                     </div>
                     <div id="metric-status-code" class="metric-val" style="color: var(--neon-emerald);">200</div>
                     <div id="metric-target-domain" class="metric-sub">https://example.com</div>
@@ -2471,7 +3752,7 @@ body {
                 <div class="metric-card">
                     <div class="metric-header">
                         <span class="metric-title">Pages Found</span>
-                        <div class="metric-icon-pill">📄</div>
+                        <div class="metric-icon-pill" style="font-size:0.75rem; font-weight:700;">DOC</div>
                     </div>
                     <div id="metric-crawled-pages" class="metric-val" style="color: var(--neon-cyan);">0</div>
                     <div id="metric-depth-info" class="metric-sub">Successfully inspected</div>
@@ -2480,7 +3761,7 @@ body {
                 <div class="metric-card">
                     <div class="metric-header">
                         <span class="metric-title">Website Forms</span>
-                        <div class="metric-icon-pill">📝</div>
+                        <div class="metric-icon-pill" style="font-size:0.75rem; font-weight:700;">FORM</div>
                     </div>
                     <div id="metric-forms-count" class="metric-val" style="color: var(--neon-purple);">0</div>
                     <div class="metric-sub">Login or contact forms found</div>
@@ -2489,7 +3770,7 @@ body {
                 <div class="metric-card">
                     <div class="metric-header">
                         <span class="metric-title">Total Links Mapped</span>
-                        <div class="metric-icon-pill">🔗</div>
+                        <div class="metric-icon-pill" style="font-size:0.75rem; font-weight:700;">LINK</div>
                     </div>
                     <div id="metric-endpoints-count" class="metric-val" style="color: var(--neon-emerald);">0</div>
                     <div class="metric-sub">Internal pages on your site</div>
@@ -2498,7 +3779,7 @@ body {
                 <div class="metric-card">
                     <div class="metric-header">
                         <span class="metric-title">Security Issues</span>
-                        <div class="metric-icon-pill">⚠️</div>
+                        <div class="metric-icon-pill" style="font-size:0.75rem; font-weight:700;">ALERT</div>
                     </div>
                     <div id="metric-findings-count" class="metric-val" style="color: var(--neon-crimson);">0</div>
                     <div id="metric-findings-breakdown" class="metric-sub">0 High • 0 Med • 0 Low</div>
@@ -2508,7 +3789,7 @@ body {
             <!-- Executive Report Synthesis Banner -->
             <div class="executive-report-banner">
                 <div class="report-banner-info">
-                    <div class="report-icon-large">📑</div>
+                    <div class="report-icon-large" style="font-size:1.4rem; font-weight:700;">PDF</div>
                     <div class="report-text-group">
                         <h3>Your Website Security Report is Ready</h3>
                         <p>A simple report listing all discovered items, their severity, and easy steps to fix them.</p>
@@ -2516,7 +3797,7 @@ body {
                 </div>
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <button type="button" class="btn-new-scan-reset" onclick="resetScanResults()">
-                        <span>🔄 Start New Audit</span>
+                        <span>Start New Audit</span>
                     </button>
                     <a id="btn-download-pdf" href="#" target="_blank" class="btn-download-pdf">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2524,7 +3805,7 @@ body {
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
-                        <span>Download PDF Report</span>
+                        <span>Download OWASP Audit Report</span>
                     </a>
                 </div>
             </div>
@@ -2645,11 +3926,11 @@ body {
         <section id="owasp-section" class="owasp-matrix-container">
             <div class="section-title-wrap">
                 <h2 class="section-heading">
-                    <span style="font-size: 1.5rem;">🏆</span>
+                    
                     <span>OWASP Top 10 Web Vulnerabilities Guide</span>
                 </h2>
                 <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 6px;">
-                    Understand the 10 most critical security risks facing web applications today — and see live detection badges dynamically updated when you scan your site.
+                    Understand the 10 most critical security risks facing web applications today, with live detection badges dynamically updated when you scan your site.
                 </p>
 
                 <!-- Filter Pills -->
@@ -2675,11 +3956,11 @@ body {
                         Visitors viewing or modifying private pages (like /admin, /portal, or other users' profiles) because server permission checks are missing or weak.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         BFS link crawler identifies exposed administrative routes and unauthenticated path traversal attempts.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Enforce strict role-based authorization on every route, and never expose administrative panels publicly.
+                        <strong>Remediation Guidance:</strong> Enforce strict role-based authorization on every route, and never expose administrative panels publicly.
                     </div>
                 </div>
 
@@ -2694,11 +3975,11 @@ body {
                         Transmitting sensitive user data over unencrypted HTTP or using invalid, expired SSL/TLS certificates that allow eavesdropping on public Wi-Fi.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         Direct TLS/SSL socket handshake verification and RFC 6797 HTTP Strict-Transport-Security (HSTS) header parsing.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Install a valid SSL certificate and add the Strict-Transport-Security header to force HTTPS always.
+                        <strong>Remediation Guidance:</strong> Install a valid SSL certificate and add the Strict-Transport-Security header to force HTTPS always.
                     </div>
                 </div>
 
@@ -2713,11 +3994,11 @@ body {
                         Attackers submitting malicious code or database commands into search boxes and forms, tricking the server into dumping data or stealing user session cookies.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         BeautifulSoup DOM form parser identifies unvalidated inputs, missing CSP restrictions, and insecure HTTP action targets.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Always use Parameterized Queries (Prepared Statements) for SQL databases and set a Content-Security-Policy.
+                        <strong>Remediation Guidance:</strong> Always use Parameterized Queries (Prepared Statements) for SQL databases and set a Content-Security-Policy.
                     </div>
                 </div>
 
@@ -2729,14 +4010,14 @@ body {
                     </div>
                     <div class="owasp-card-title">Insecure Design</div>
                     <div class="owasp-card-desc">
-                        Missing security architecture before building the site — such as lack of rate-limiting, allowing automated bots to guess passwords repeatedly.
+                        Missing security architecture before building the site, such as lack of rate-limiting, allowing automated bots to guess passwords repeatedly.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         Heuristic form security analysis and response header inspection for anti-automation policies.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Implement rate limiting, CAPTCHA on login forms, and secure password-recovery workflows.
+                        <strong>Remediation Guidance:</strong> Implement rate limiting, CAPTCHA on login forms, and secure password-recovery workflows.
                     </div>
                 </div>
 
@@ -2751,11 +4032,11 @@ body {
                         Leaving default passwords, unneeded debug features, open directory browsing, or omitting modern defense headers like X-Frame-Options and CSP.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         HTTP response header rule-matching engine parses CSP, Clickjacking (X-Frame-Options), and MIME-sniffing (X-Content-Type-Options).
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Add standard security headers in Nginx or Apache, and turn off directory browsing in your web server configuration.
+                        <strong>Remediation Guidance:</strong> Add standard security headers in Nginx or Apache, and turn off directory browsing in your web server configuration.
                     </div>
                 </div>
 
@@ -2770,11 +4051,11 @@ body {
                         Running old web server versions or outdated CMS libraries that have publicly known vulnerabilities that automated scanning bots exploit.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         Passive Server & X-Powered-By header fingerprinting to detect revealed version numbers.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Hide server banner info with `server_tokens off;` and regularly update server packages.
+                        <strong>Remediation Guidance:</strong> Hide server banner info with `server_tokens off;` and regularly update server packages.
                     </div>
                 </div>
 
@@ -2789,11 +4070,11 @@ body {
                         Weak authentication mechanisms allowing credential stuffing, session hijacking, or forms sending login credentials across plain HTTP.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         Inspects login forms for insecure HTTP transmission, missing CSRF tokens, and unflagged session cookies.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Ensure all login forms submit over HTTPS, use anti-CSRF tokens, and mark session cookies as HttpOnly and Secure.
+                        <strong>Remediation Guidance:</strong> Ensure all login forms submit over HTTPS, use anti-CSRF tokens, and mark session cookies as HttpOnly and Secure.
                     </div>
                 </div>
 
@@ -2808,11 +4089,11 @@ body {
                         Loading JavaScript libraries or plugins from external CDNs without verifying their integrity hash, allowing third-party compromise.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         HTML tag scanner checks external script and style links for Subresource Integrity (SRI) cryptographic hash attributes.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Add `integrity="sha384-..."` attributes when including third-party CDN scripts.
+                        <strong>Remediation Guidance:</strong> Add `integrity="sha384-..."` attributes when including third-party CDN scripts.
                     </div>
                 </div>
 
@@ -2827,11 +4108,11 @@ body {
                         Not recording security errors and login failures, meaning security breaches can go unnoticed for weeks or months.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         Audits server error status handling to verify that errors fail gracefully without leaking database stack traces.
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Set up central logging for suspicious HTTP codes (401, 403, 500) and failed authentication attempts.
+                        <strong>Remediation Guidance:</strong> Set up central logging for suspicious HTTP codes (401, 403, 500) and failed authentication attempts.
                     </div>
                 </div>
 
@@ -2846,33 +4127,140 @@ body {
                         Tricking your server into fetching remote URLs or communicating with private internal servers and cloud metadata endpoints.
                     </div>
                     <div class="owasp-algorithm-box">
-                        <div class="owasp-algorithm-title">⚙️ Detection Method:</div>
+                        <div class="owasp-algorithm-title">Detection Method:</div>
                         URL parameter heuristics parse query strings for parameters commonly used in SSRF attacks (e.g. `?dest=`, `?url=`, `?redirect=`).
                     </div>
                     <div class="owasp-fix-tip">
-                        💡 <strong>How to Fix:</strong> Use a strict domain allowlist for any server-initiated outbound HTTP requests and block access to 127.0.0.1.
+                        <strong>Remediation Guidance:</strong> Use a strict domain allowlist for any server-initiated outbound HTTP requests and block access to 127.0.0.1.
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="app-footer">
-            <div class="footer-links">
-                <a href="#scanner-card" class="footer-link">Scanner Deck</a>
-                <a href="#owasp-section" class="footer-link">OWASP Top 10 Guide</a>
-                <a href="javascript:void(0)" onclick="toggleAIDrawer(true)" class="footer-link">AI Security Advisor</a>
-                <a href="https://owasp.org/" target="_blank" rel="noreferrer" class="footer-link">OWASP Foundation</a>
+        <!-- 19. Accessible Expandable FAQ Accordion Section -->
+        <section id="faq-section" class="faq-section" aria-labelledby="faq-title">
+            <div class="faq-header-center">
+                <div class="scanner-badge-pill" style="display: inline-flex; margin-bottom: 12px;">
+                    <span>Security Knowledge Base</span>
+                </div>
+                <h2 id="faq-title" class="faq-main-title">Frequently Asked Questions</h2>
+                <p class="faq-subtitle">Clear explanations about WebShield AI scanner capabilities, non-destructive safety, and remediation steps.</p>
             </div>
-            <p>WebShield AI • A Vulnerability Scanner & Security Advisor • Simple, Safe, & Easy to Understand</p>
+
+            <div class="faq-accordion-list">
+                <details class="faq-card">
+                    <summary class="faq-summary">
+                        <span>What vulnerabilities does WebShield AI check for?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        WebShield AI covers 15 automated security checks mapped directly against the 10 categories of the OWASP Top 10 standard. This includes Content-Security-Policy (CSP), Strict-Transport-Security (HSTS), X-Frame-Options (Clickjacking), X-Content-Type-Options (MIME sniffing), cookie security flags (HttpOnly &amp; Secure), unencrypted HTTP login forms, missing Anti-CSRF protection tokens, technology banner leakage, and exposed backup archives (.env, .git, .bak).
+                    </div>
+                </details>
+
+                <details class="faq-card">
+                    <summary class="faq-summary">
+                        <span>Is scanning my website safe and non-destructive?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        Yes, WebShield AI operates entirely via passive security inspection and benign crawling. It conducts header verification, DOM form parameter audits, and safe HTTP requests without deploying destructive denial-of-service or database-altering exploit payloads.
+                    </div>
+                </details>
+
+                <details class="faq-card">
+                    <summary class="faq-summary">
+                        <span>Do I need authorization before scanning a website?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        Yes. In accordance with computer misuse legislation and our Terms &amp; Conditions, you should only initiate scans against web properties that you own, operate, or have received explicit written permission to test.
+                    </div>
+                </details>
+
+                <details class="faq-card">
+                    <summary class="faq-summary">
+                        <span>How does the Breadth-First Search (BFS) crawler function?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        The crawler utilizes a FIFO queue structure (Python deque) to systematically discover internal endpoints starting from depth 0 (homepage). It normalizes domains, respects crawl limits (up to 10 pages in Medium scan, up to 25 pages in Deep scan), and uses an O(1) visited hash set to eliminate circular loops.
+                    </div>
+                </details>
+
+                <details class="faq-card">
+                    <summary class="faq-summary">
+                        <span>What is the difference between Basic, Medium, and Deep scans?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        Basic Scan checks the homepage surface in 2 to 5 seconds. Medium Scan traverses direct site links to inspect HTML forms and CSRF protection. Deep Scan executes multi-level crawl traversal, examines cookie flags, scans for exposed backup configurations, and synthesizes an executive PDF report.
+                    </div>
+                </details>
+
+                <details class="faq-card">
+                    <summary class="faq-summary">
+                        <span>Can I export audit results as an executive PDF report?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <div class="faq-answer">
+                        Yes. After running a Medium or Deep scan, click the "Download Executive PDF" button to download a formatted security report complete with CVSS ratings, discovered attack surface metrics, and specific remediation code snippets.
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Professional Footer with Last Updated Metadata -->
+        <footer style="margin-top: 64px; border-top: 1px solid var(--border-subtle); padding: 36px 0 48px; color: var(--text-muted); font-size: 0.88rem;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+                <div>
+                    <div style="font-weight: 700; color: var(--text-main); font-size: 1rem; margin-bottom: 6px;">WebShield AI</div>
+                    <div style="color: var(--text-dim); font-size: 0.82rem;">Autonomous Cyber Defense System &amp; Web Vulnerability Scanner</div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+                    <a href="/privacy" style="color: var(--text-muted); text-decoration: none;">Privacy Policy</a>
+                    <a href="/terms" style="color: var(--text-muted); text-decoration: none;">Terms &amp; Conditions</a>
+                    <a href="#owasp-section" style="color: var(--text-muted); text-decoration: none;">OWASP Standards</a>
+                    <a href="#faq-section" style="color: var(--text-muted); text-decoration: none;">FAQ</a>
+                    <button type="button" onclick="openCookiePreferences()" style="background: none; border: none; color: var(--text-muted); font-size: 0.88rem; cursor: pointer; padding: 0; text-decoration: underline;">Cookie Settings</button>
+                    <button type="button" onclick="openContactModal()" style="background: none; border: none; color: var(--neon-cyan); font-size: 0.88rem; cursor: pointer; padding: 0; font-weight: 600;">Contact Us</button>
+                </div>
+            </div>
+
+            <!-- 18. Verifiable Last Updated Metadata -->
+            <div style="margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+                <div class="last-updated-badge">
+                    <span class="last-updated-dot"></span>
+                    <span>Engine v2.1.0 • Baseline: OWASP Top 10 • Knowledge Base Updated: October 2026</span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-dim);">
+                    For authorized security assessments and defense auditing only.
+                </div>
+            </div>
         </footer>
 
     </main>
 
+    <!-- 4. Floating Back to Top Button -->
+    <button id="btn-back-to-top" class="btn-back-to-top" onclick="scrollToTop()" aria-label="Scroll back to top" title="Back to top" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- 20. Floating Contact & Security Disclosure Button -->
+    <button id="btn-floating-contact" class="floating-contact-btn" onclick="openContactModal()" aria-label="Open contact and security disclosure options" title="Contact Us">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+        <span>Contact Us</span>
+    </button>
+
     <!-- Floating Chatbot Widget Button (Pinned Bottom Right) -->
     <button id="floating-advisor-btn" class="floating-chatbot-btn" onclick="toggleAIDrawer(true)" aria-label="Open WebShield AI Advisor">
-        <div class="floating-btn-icon-bubble">🤖</div>
+        <div class="floating-btn-icon-bubble" style="font-size:0.9rem; font-weight:700;">AI</div>
         <div class="floating-btn-text-wrap">
             <span class="floating-btn-title">Ask WebShield AI</span>
             <span class="floating-btn-sub">Security Advisor</span>
@@ -2891,12 +4279,12 @@ body {
                     </div>
                     <div>
                         <div class="drawer-title">WebShield AI Security Advisor</div>
-                        <div style="font-size: 0.7rem; color: var(--neon-cyan);">FRIENDLY BEGINNER-FOCUSED ADVISOR</div>
+                        <div style="font-size: 0.7rem; color: var(--neon-cyan);">ACTIVE SECURITY ADVISOR</div>
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <button type="button" class="btn-clear-chat" onclick="clearChatHistory()" title="Clear conversation" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #8b95b0; border-radius: 6px; padding: 4px 8px; font-size: 0.7rem; cursor: pointer;">Clear</button>
-                    <button class="btn-drawer-close" onclick="toggleAIDrawer(false)">✕</button>
+                    <button type="button" class="btn-clear-chat" onclick="confirmClearChat()" title="Clear conversation" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #8b95b0; border-radius: 6px; padding: 4px 8px; font-size: 0.7rem; cursor: pointer;">Clear</button>
+                    <button class="btn-drawer-close" onclick="toggleAIDrawer(false)">&times;</button>
                 </div>
             </div>
 
@@ -2928,12 +4316,209 @@ body {
                 <button type="submit" class="btn-drawer-send">Send</button>
             </form>
         </aside>
+    
+    <!-- 5. Mobile Menu Drawer Navigation -->
+    <div id="mobile-drawer-overlay" class="mobile-drawer-overlay" onclick="toggleMobileMenu(true)">
+        <nav id="mobile-nav-drawer" class="mobile-nav-drawer" onclick="event.stopPropagation()" aria-label="Mobile Navigation Menu">
+            <div class="mobile-drawer-header">
+                <div class="brand-group">
+                    <div class="brand-title">WebShield <span>AI</span></div>
+                </div>
+                <button type="button" class="btn-drawer-close" onclick="toggleMobileMenu(true)" aria-label="Close mobile navigation menu">&times;</button>
+            </div>
+            <ul class="mobile-drawer-links">
+                <li><a href="#scanner-card" class="mobile-drawer-link" onclick="toggleMobileMenu(true)">Website Scanner</a></li>
+                <li><a href="#attack-surface-section" class="mobile-drawer-link" onclick="toggleMobileMenu(true)">Discovered Pages</a></li>
+                <li><a href="#findings-section" class="mobile-drawer-link" onclick="toggleMobileMenu(true)">Security Issues</a></li>
+                <li><a href="#owasp-section" class="mobile-drawer-link" onclick="toggleMobileMenu(true)">OWASP Top 10</a></li>
+                <li><a href="#faq-section" class="mobile-drawer-link" onclick="toggleMobileMenu(true)">FAQ</a></li>
+                <li><a href="/privacy" class="mobile-drawer-link">Privacy Policy</a></li>
+                <li><a href="/terms" class="mobile-drawer-link">Terms &amp; Conditions</a></li>
+            </ul>
+            <div class="mobile-drawer-actions">
+                <button type="button" class="nav-icon-btn" onclick="toggleMobileMenu(true); openSiteSearch();" style="width: 100%;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span>Search Site (Ctrl+K)</span>
+                </button>
+                <button type="button" class="nav-icon-btn theme-toggle-btn" onclick="toggleTheme()" style="width: 100%;">
+                    <svg class="theme-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle></svg>
+                    <span>Toggle Theme</span>
+                </button>
+                <button type="button" class="btn-ai-drawer-trigger" onclick="toggleMobileMenu(true); toggleAIDrawer(true);" style="width: 100%;">
+                    <span>Ask Security Advisor</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- 3. Site Search Accessible Dialog -->
+    <div id="site-search-modal" class="search-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="search-modal-heading" onclick="if(event.target===this) closeSiteSearch()">
+        <div class="search-modal-box">
+            <div class="search-bar-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="site-search-input" class="search-input-field" placeholder="Search scanner, OWASP risks, FAQs, security checks..." oninput="handleSiteSearchInput(event)" aria-label="Search content">
+                <button type="button" class="contact-modal-close" onclick="closeSiteSearch()" aria-label="Close search" style="position: static; width: 28px; height: 28px;">&times;</button>
+            </div>
+            <div class="search-filter-pills" role="tablist">
+                <button type="button" class="search-filter-pill active" onclick="filterSearchCategory('ALL', this)">All</button>
+                <button type="button" class="search-filter-pill" onclick="filterSearchCategory('SCANNER', this)">Scanner</button>
+                <button type="button" class="search-filter-pill" onclick="filterSearchCategory('OWASP', this)">OWASP Top 10</button>
+                <button type="button" class="search-filter-pill" onclick="filterSearchCategory('FAQ', this)">FAQ</button>
+                <button type="button" class="search-filter-pill" onclick="filterSearchCategory('LEGAL', this)">Legal</button>
+            </div>
+            <div id="search-results-container" class="search-results-list" role="region" aria-live="polite">
+                <!-- Live search results populate here -->
+            </div>
+            <div class="search-footer-info">
+                <span>Navigate with <kbd>↑</kbd> <kbd>↓</kbd></span>
+                <span>Press <kbd>Esc</kbd> to exit</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Simple Cookie Consent Banner -->
+    <div id="cookie-banner" class="cookie-banner" role="region" aria-label="Cookie Consent Banner">
+        <div class="cookie-content">
+            <div class="cookie-title">Cookie &amp; Privacy Notice</div>
+            <div class="cookie-text">
+                WebShield AI uses essential cookies to secure your session and validate anti-CSRF tokens. With your consent, we also capture campaign attribution parameters to evaluate scanner usage.
+            </div>
+        </div>
+        <div class="cookie-actions">
+            <button type="button" class="btn-cookie-accept" onclick="acceptAllCookies()">Accept All</button>
+            <button type="button" class="btn-cookie-reject" onclick="rejectOptionalCookies()">Reject Non-Essential</button>
+            <button type="button" class="btn-cookie-prefs" onclick="openCookiePreferences()">Cookie Settings</button>
+        </div>
+    </div>
+
+    <!-- Cookie Preferences Modal -->
+    <div id="cookie-prefs-modal" class="search-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cookie-prefs-heading" onclick="if(event.target===this) closeCookiePreferences()">
+        <div class="contact-modal-box" style="max-width: 500px;">
+            <button type="button" class="contact-modal-close" onclick="closeCookiePreferences()" aria-label="Close preferences">&times;</button>
+            <h2 id="cookie-prefs-heading" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Cookie Preferences</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Customize your cookie settings. Strictly necessary cookies cannot be disabled as they are required for security and authentication.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 6px;">
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">Strictly Necessary Cookies</div>
+                        <div style="font-size: 0.78rem; color: var(--text-dim);">Session token, auth state, and anti-CSRF defense.</div>
+                    </div>
+                    <span style="font-size: 0.78rem; font-weight: 700; color: var(--neon-emerald);">Always Active</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 6px;">
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">Campaign &amp; UTM Attribution</div>
+                        <div style="font-size: 0.78rem; color: var(--text-dim);">Stores incoming campaign parameters in session storage.</div>
+                    </div>
+                    <label style="cursor: pointer;">
+                        <input type="checkbox" id="cookie-pref-analytics" checked style="width: 18px; height: 18px; accent-color: var(--neon-cyan);">
+                    </label>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 6px;">
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">Performance Telemetry</div>
+                        <div style="font-size: 0.78rem; color: var(--text-dim);">Anonymized crawl speed and scan latency benchmarks.</div>
+                    </div>
+                    <label style="cursor: pointer;">
+                        <input type="checkbox" id="cookie-pref-telemetry" checked style="width: 18px; height: 18px; accent-color: var(--neon-cyan);">
+                    </label>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" class="btn-modal-secondary" onclick="closeCookiePreferences()" style="padding: 10px 18px;">Cancel</button>
+                <button type="button" class="btn-modal-primary" onclick="saveCustomPreferences()" style="padding: 10px 22px;">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 20. Contact & Security Disclosure Modal -->
+    <div id="contact-modal" class="contact-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="contact-modal-heading" onclick="if(event.target===this) closeContactModal()">
+        <div class="contact-modal-box">
+            <button type="button" class="contact-modal-close" onclick="closeContactModal()" aria-label="Close contact dialog">&times;</button>
+            <h2 id="contact-modal-heading" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px;">Contact &amp; Vulnerability Disclosure</h2>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">Have questions about WebShield AI or need to submit a responsible security report? Fill out the form below.</p>
+
+            <div id="contact-alert-box" style="display: none;"></div>
+
+            <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                    <div>
+                        <label for="contact-name" style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Your Name / Handle</label>
+                        <input type="text" id="contact-name" class="form-input" style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-medium); border-radius: 6px; color: var(--text-main);" placeholder="Alex Mercer">
+                    </div>
+                    <div>
+                        <label for="contact-email" style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Email Address *</label>
+                        <input type="email" id="contact-email" class="form-input" required style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-medium); border-radius: 6px; color: var(--text-main);" placeholder="alex@example.com">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label for="contact-subject" style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Topic / Subject</label>
+                    <select id="contact-subject" style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-medium); border-radius: 6px; color: var(--text-main);">
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Responsible Disclosure">Responsible Vulnerability Disclosure</option>
+                        <option value="Feature Request">Scanner Feature Request</option>
+                        <option value="Bug Report">Engine Bug Report</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label for="contact-target-url" style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Target Website URL (if applicable)</label>
+                    <input type="text" id="contact-target-url" class="form-input" style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-medium); border-radius: 6px; color: var(--text-main);" placeholder="https://example.com">
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label for="contact-message" style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Message Details *</label>
+                    <textarea id="contact-message" rows="4" required style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border-medium); border-radius: 6px; color: var(--text-main); font-family: inherit; resize: vertical;" placeholder="Describe your question or security inquiry in detail..."></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 0.75rem; color: var(--text-dim);">
+                        Direct: <a href="mailto:security@webshieldai.local" style="color: var(--neon-cyan); text-decoration: none;">security@webshieldai.local</a>
+                    </div>
+                    <button type="submit" id="contact-btn-submit" class="btn-modal-primary" style="padding: 10px 24px;">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 17. Accessible Confirmation Dialog -->
+    <div id="confirm-modal" class="confirm-modal-overlay" role="alertdialog" aria-modal="true" aria-labelledby="confirm-modal-title" aria-describedby="confirm-modal-desc">
+        <div class="confirm-modal-box">
+            <h3 id="confirm-modal-title" class="confirm-modal-title">Confirm Action</h3>
+            <p id="confirm-modal-desc" class="confirm-modal-desc">Are you sure you want to proceed?</p>
+            <div class="confirm-modal-actions">
+                <button type="button" id="confirm-modal-cancel" class="btn-modal-secondary" onclick="closeConfirmModal()" style="padding: 10px 20px;">Cancel</button>
+                <button type="button" id="confirm-modal-btn" class="btn-modal-primary" onclick="executeConfirmAction()" style="padding: 10px 24px;">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Free Limit Reached Cyber Modal -->
+    <div id="limit-modal" class="auth-modal-overlay">
+        <div class="auth-modal-box">
+            <button class="auth-modal-close" onclick="closeLimitModal()" aria-label="Close modal">&times;</button>
+            <div class="auth-modal-icon-badge" style="font-size:1.1rem; font-weight:700;">!</div>
+            <h2 class="auth-modal-title" id="limit-modal-title">Your free credits are over</h2>
+            <p class="auth-modal-desc" id="limit-modal-desc">
+                Your <strong>2 free scan credits</strong> have been completely used. To continue scanning websites with <strong>unlimited scans</strong>, instant AI vulnerability fixes, and executive PDF reports, please sign in or create a free account.
+            </p>
+            <div class="auth-modal-actions">
+                <a href="/login?reason=limit" class="btn-modal-primary">Sign In & Unlock Unlimited Scans →</a>
+                <a href="/register" class="btn-modal-secondary">Create Free Account (Unlimited)</a>
+            </div>
+            <p class="auth-modal-footer-note">Authorized Security Verification • Instant Analysis</p>
+        </div>
     </div>
 
     <!-- Application Dynamic Engine: Embedded to eliminate browser caching issues completely -->
     <script id="webshield-engine">
 /**
- * WebShield AI — Dynamic Autonomous Security Advisor & Scanner
+ * WebShield AI - Dynamic Autonomous Security Advisor & Scanner
  * Starts clean and fresh on page load/reload as requested.
  */
 
@@ -2946,7 +4531,7 @@ let currentSelectedLevel = 'basic';
 const SCAN_LEVEL_DATA = {
     basic: {
         name: "Basic Scan",
-        sub: "A quick surface check — great for beginners.",
+        sub: "A quick surface check - great for beginners.",
         depth: 0,
         checks: [
             "SSL/TLS certificate validity (Is your site using HTTPS?)",
@@ -2959,7 +4544,7 @@ const SCAN_LEVEL_DATA = {
     },
     medium: {
         name: "Medium Scan",
-        sub: "Follows all direct links & checks forms — recommended for most sites.",
+        sub: "Follows all direct links & checks forms - recommended for most sites.",
         depth: 1,
         checks: [
             "Everything in Basic Scan",
@@ -2972,7 +4557,7 @@ const SCAN_LEVEL_DATA = {
     },
     deep: {
         name: "Deep Scan",
-        sub: "Thorough multi-page crawler & deep security audit — up to 25 pages.",
+        sub: "Thorough multi-page crawler & deep security audit - up to 25 pages.",
         depth: 2,
         checks: [
             "Everything in Basic & Medium scans",
@@ -2998,19 +4583,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Reset to default Basic Scan level
     selectScannerLevel('basic');
 
-    // 4. Initialize dynamic counter animations
-    initHeroCounters();
 
-    // 5. Restore chat history if user was interacting with advisor
-    restoreChatHistory();
+    // 5. Always reset chat history to clean state on fresh page load/reload
+    clearChatHistory();
+
+    // 6. Initialize user authentication state and scan quota
+    initAuthAndQuota();
 });
 
 function cleanReloadState() {
-    // Clear stored previous scans and target URLs so page is completely fresh
+    // Clear stored previous scans, target URLs, and chat history so page is completely fresh
     localStorage.removeItem("webshield_last_scan");
     localStorage.removeItem("webshield_target_url");
     localStorage.removeItem("webshield_terminal_logs");
+    localStorage.removeItem("webshield_chat_history");
+    clearChatHistory();
     currentScanData = null;
+
+    // Reset guest scan quota session on reload so each refresh resets free scans back to 2
+    const freshGuestId = "guest_" + Date.now() + "_" + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem("webshield_guest_id", freshGuestId);
+    sessionStorage.setItem("webshield_guest_id", freshGuestId);
 
     // Reset input fields to empty
     const cardUrl = document.getElementById("card-target-url");
@@ -3071,27 +4664,7 @@ function initTargetSync() {
 }
 
 function initHeroCounters() {
-    const heroScansEl = document.getElementById("hero-stat-scans");
-    if (heroScansEl) {
-        animateValue(heroScansEl, 0, 1250, 700, "+");
-    }
-    const heroVulnsEl = document.getElementById("hero-stat-vulns");
-    if (heroVulnsEl) {
-        animateValue(heroVulnsEl, 0, 15, 500, "+");
-    }
-}
-
-function animateValue(obj, start, end, duration, suffix = "") {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        }
-    };
-    window.requestAnimationFrame(step);
+    // Static honest metrics
 }
 
 function restoreChatHistory() {
@@ -3108,7 +4681,7 @@ function clearChatHistory() {
     if (stream) {
         stream.innerHTML = `
             <div class="chat-bubble bot">
-                Hello! I am your <strong>WebShield AI Security Advisor</strong>. I am here to help you understand your website security in plain, easy English! Ask me any question about what we found on your website, OWASP Top 10 risks, or how to easily fix vulnerabilities.
+                Hello! I am your <strong>WebShield AI Security Advisor</strong> (powered by Google Gemini). I am here to answer your questions naturally in simple, everyday English! Ask me anything about your website vulnerabilities, OWASP Top 10 risks, or how to fix issues step-by-step.
             </div>
         `;
     }
@@ -3144,10 +4717,10 @@ function updateOwaspMatrixStatus(vulnerabilities) {
         const count = counts[code];
         if (count > 0) {
             pill.className = "owasp-status-pill flagged";
-            pill.innerHTML = `⚠️ ${count} ${count === 1 ? 'Issue' : 'Issues'} Found`;
+            pill.innerHTML = `${count} ${count === 1 ? 'Issue' : 'Issues'} Found`;
         } else {
             pill.className = "owasp-status-pill clean";
-            pill.innerHTML = `✓ Safe (Clean)`;
+            pill.innerHTML = `Safe (Clean)`;
         }
     }
 }
@@ -3187,7 +4760,7 @@ function selectScannerLevel(level) {
     if (listEl) {
         listEl.innerHTML = data.checks.map(item => `
             <div class="check-feature-item">
-                <span class="icon">✓</span>
+                <span class="icon" style="font-weight: 700;">+</span>
                 <span>${escapeHtml(item)}</span>
             </div>
         `).join("");
@@ -3266,6 +4839,13 @@ function launchCardScan() {
 async function launchAutonomousScan() {
     if (isScanning) return;
 
+    // Check if guest has exhausted the 2-scan limit before launching
+    if (!currentUser && currentQuota && currentQuota.remaining <= 0) {
+        openLimitModal("Your free credits are over");
+        addTerminalLog("ERROR", "Your free credits are over! Please sign in or register for unlimited scans.");
+        return;
+    }
+
     const target = getFullTargetUrl();
     const depth = parseInt(document.getElementById("crawl-depth").value, 10) || 0;
     const speed = document.getElementById("scan-speed") ? document.getElementById("scan-speed").value : "Balanced";
@@ -3292,9 +4872,17 @@ async function launchAutonomousScan() {
     startProgressSimulation();
 
     try {
+        const token = getAuthToken();
+        const guestId = getGuestId();
+
         const response = await fetch("/api/scan", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": token ? `Bearer ${token}` : "",
+                "x-auth-token": token,
+                "x-guest-id": guestId
+            },
             body: JSON.stringify({
                 target_url: target,
                 crawl_depth: depth,
@@ -3304,12 +4892,36 @@ async function launchAutonomousScan() {
             })
         });
 
-        if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.detail || `Scan request failed with HTTP ${response.status}`);
+        const data = await response.json();
+
+        // Check if guest scan limit reached
+        if (data.limit_reached || data.error_code === "SCAN_LIMIT_REACHED") {
+            if (simulationInterval) clearInterval(simulationInterval);
+            isScanning = false;
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span>Start Free Scan</span>
+                `;
+            }
+            if (data.quota) updateQuotaUI(data.quota);
+            openLimitModal("Your free credits are over");
+            addTerminalLog("ERROR", "Your free credits are over! Please sign in or register for unlimited scans.");
+            return;
         }
 
-        const data = await response.json();
+        if (!response.ok || data.status === "error") {
+            throw new Error(data.message || `Scan request failed with HTTP ${response.status}`);
+        }
+
+        // Update quota on successful scan
+        if (data.quota) {
+            updateQuotaUI(data.quota);
+        }
 
         if (simulationInterval) clearInterval(simulationInterval);
         for (let i = 1; i <= 5; i++) {
@@ -3510,7 +5122,7 @@ function renderAttackSurface(data) {
         } else {
             formsBody.innerHTML = forms.map(f => `
                 <tr>
-                    <td><span style="font-weight: 700; color: var(--neon-purple);">${escapeHtml(f.method || 'GET')}</span></td>
+                    <td><span style="font-weight: 700; color: var(--neon-cyan);">${escapeHtml(f.method || 'GET')}</span></td>
                     <td>${escapeHtml(f.action || f.page)}</td>
                     <td style="color: var(--text-muted);">${(f.inputs && f.inputs.length) ? f.inputs.map(i => `<code style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:3px; margin-right:4px;">${escapeHtml(i)}</code>`).join(' ') : '<em>No input parameters</em>'}</td>
                 </tr>
@@ -3570,7 +5182,7 @@ function renderFindings(vulns) {
     if (!vulns || !vulns.length) {
         container.innerHTML = `
             <div style="text-align: center; padding: 48px; background: rgba(0,230,118,0.05); border: 1px dashed var(--neon-emerald); border-radius: var(--radius-lg);">
-                <div style="font-size: 2.5rem; margin-bottom: 12px;">🛡️</div>
+                <div style="margin-bottom: 12px; color: var(--neon-emerald);"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
                 <h3 style="color: var(--neon-emerald); font-weight: 700; margin-bottom: 6px;">No Security Issues Found</h3>
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Your website looks safe for the selected scan level.</p>
             </div>
@@ -3661,6 +5273,15 @@ function askQuickPrompt(questionText) {
     }
 }
 
+function formatAiMarkdown(text) {
+    if (!text) return "";
+    let formatted = escapeHtml(text);
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    formatted = formatted.replace(/`([^`]+)`/g, '<code style="background:rgba(0,229,255,0.12); color:#00e5ff; padding:2px 5px; border-radius:4px; font-family:var(--font-mono); font-size:0.8rem;">$1</code>');
+    return formatted;
+}
+
 async function handleAIChatSubmit(e) {
     e.preventDefault();
     const input = document.getElementById("ai-user-query");
@@ -3678,7 +5299,7 @@ async function handleAIChatSubmit(e) {
 
     const botBubble = document.createElement("div");
     botBubble.className = "chat-bubble bot";
-    botBubble.innerHTML = `<span style="color:var(--neon-cyan);">Thinking and preparing simple advice...</span>`;
+    botBubble.innerHTML = `<span style="color:var(--neon-cyan);">Thinking and generating personalized advice...</span>`;
     stream.appendChild(botBubble);
     stream.scrollTop = stream.scrollHeight;
 
@@ -3690,21 +5311,10 @@ async function handleAIChatSubmit(e) {
         });
         const data = await res.json();
 
-        let replyHtml = `<strong>${escapeHtml(data.title || 'Security Analysis')}</strong><br><br>`;
-        replyHtml += `<div style="white-space: pre-wrap;">${escapeHtml(data.content || '')}</div>`;
-
-        if (data.remediation) {
-            replyHtml += `<br><div style="margin-top:8px; padding:10px; background:#05070d; border-radius:6px; border:1px solid rgba(0,229,255,0.2);">`;
-            replyHtml += `<div style="color:var(--neon-cyan); font-weight:700; font-size:0.75rem; margin-bottom:6px;">PROPOSED REMEDIATION:</div>`;
-            for (const [key, code] of Object.entries(data.remediation)) {
-                replyHtml += `<div style="font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; margin-top:4px;">${escapeHtml(key)}:</div>`;
-                replyHtml += `<code style="display:block; background:#000; padding:6px; border-radius:4px; font-family:var(--font-mono); font-size:0.75rem; color:#a5d6a7; overflow-x:auto;">${escapeHtml(code)}</code>`;
-            }
-            replyHtml += `</div>`;
-        }
+        let replyHtml = `<strong>${escapeHtml(data.title || 'Security Advisor')}</strong><br><br>`;
+        replyHtml += `<div style="white-space: pre-wrap; line-height: 1.55;">${formatAiMarkdown(data.content || '')}</div>`;
 
         botBubble.innerHTML = replyHtml;
-        localStorage.setItem("webshield_chat_history", stream.innerHTML);
 
     } catch (err) {
         botBubble.innerHTML = `<span style="color:var(--neon-crimson);">Failed to contact AI service: ${escapeHtml(err.message)}</span>`;
@@ -3740,8 +5350,171 @@ function scrollToSection(id) {
     }
 }
 
+// ==========================================================================
+// Authentication & Quota Management
+// ==========================================================================
+
+let currentUser = null;
+let currentQuota = { used: 0, remaining: 2, limit: 2, is_unlimited: false };
+
+function getGuestId() {
+    let gid = sessionStorage.getItem("webshield_guest_id") || localStorage.getItem("webshield_guest_id");
+    if (!gid) {
+        gid = "guest_" + Date.now() + "_" + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem("webshield_guest_id", gid);
+        sessionStorage.setItem("webshield_guest_id", gid);
+    }
+    return gid;
+}
+
+function getAuthToken() {
+    return localStorage.getItem("webshield_auth_token") || getCookie("webshield_session") || "";
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return "";
+}
+
+async function initAuthAndQuota() {
+    const token = getAuthToken();
+    const guestId = getGuestId();
+
+    try {
+        const res = await fetch("/api/auth/status", {
+            headers: {
+                "Authorization": token ? `Bearer ${token}` : "",
+                "x-auth-token": token,
+                "x-guest-id": guestId
+            }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.authenticated && data.user) {
+                currentUser = data.user;
+                currentQuota = {
+                    is_unlimited: true,
+                    used: data.user.scan_count || 0,
+                    remaining: "unlimited",
+                    limit: "unlimited"
+                };
+            } else {
+                currentUser = null;
+                currentQuota = data.quota || { used: 0, remaining: 2, limit: 2, is_unlimited: false };
+            }
+        }
+    } catch (e) {
+        console.warn("Could not fetch auth status:", e);
+    }
+
+    renderNavAuth();
+    updateQuotaUI();
+}
+
+function renderNavAuth() {
+    const container = document.getElementById("nav-auth-container");
+    if (!container) return;
+
+    if (currentUser) {
+        const initial = (currentUser.name || currentUser.email || "U").charAt(0).toUpperCase();
+        const displayName = currentUser.name || currentUser.email.split("@")[0];
+        container.innerHTML = `
+            <div class="user-profile-badge" title="${escapeHtml(currentUser.email)}">
+                <div class="user-avatar-circle">${escapeHtml(initial)}</div>
+                <span style="font-weight: 600; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(displayName)}</span>
+                <span class="unlimited-badge-pill">UNLIMITED</span>
+                <button type="button" class="btn-nav-logout" onclick="confirmLogout()" title="Log Out">Log Out</button>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <a href="/login" class="auth-nav-btn btn-nav-login">Sign In</a>
+            <a href="/register" class="auth-nav-btn btn-nav-register">Create Account</a>
+        `;
+    }
+}
+
+function updateQuotaUI(quotaData) {
+    if (quotaData) currentQuota = quotaData;
+
+    const textEl = document.getElementById("quota-status-text");
+    const quotaLink = document.querySelector(".quota-link");
+
+    if (currentUser || currentQuota.is_unlimited) {
+        if (textEl) {
+            textEl.innerHTML = `<strong style="color: var(--neon-emerald);">Unlimited Scans Active</strong> • Logged in as ${escapeHtml(currentUser ? currentUser.email : 'Member')}`;
+        }
+        if (quotaLink) {
+            quotaLink.innerText = "Member Access";
+            quotaLink.style.color = "var(--neon-emerald)";
+            quotaLink.onclick = function() {
+                alert("You have Unlimited Scans as a registered WebShield AI member.");
+            };
+        }
+    } else {
+        const remaining = typeof currentQuota.remaining === 'number' ? currentQuota.remaining : 2;
+        if (textEl) {
+            if (remaining > 1) {
+                textEl.innerHTML = `<span style="color: var(--neon-cyan); font-weight: 700;">${remaining} free scans</span> available today`;
+            } else if (remaining === 1) {
+                textEl.innerHTML = `<span style="color: var(--neon-amber); font-weight: 700;">1 free scan</span> remaining`;
+            } else {
+                textEl.innerHTML = `<span style="color: var(--neon-crimson); font-weight: 700;">0 free scans remaining</span> (Limit reached)`;
+            }
+        }
+        if (quotaLink) {
+            quotaLink.innerText = "Get unlimited →";
+            quotaLink.style.color = "";
+            quotaLink.onclick = function() {
+                openLimitModal();
+            };
+        }
+    }
+}
+
+async function handleLogout() {
+    try {
+        const token = getAuthToken();
+        await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: { "Authorization": token ? `Bearer ${token}` : "" }
+        });
+    } catch (e) {}
+
+    localStorage.removeItem("webshield_auth_token");
+    localStorage.removeItem("webshield_user");
+    document.cookie = "webshield_session=; path=/; max-age=0";
+    currentUser = null;
+    initAuthAndQuota();
+}
+
+function openLimitModal(customTitle, customDesc) {
+    const modal = document.getElementById("limit-modal");
+    if (!modal) return;
+    const titleEl = document.getElementById("limit-modal-title");
+    const descEl = document.getElementById("limit-modal-desc");
+    if (titleEl) {
+        titleEl.innerText = customTitle || "Your free credits are over";
+    }
+    if (descEl && customDesc) {
+        descEl.innerHTML = customDesc;
+    }
+    modal.classList.add("active");
+}
+
+function closeLimitModal() {
+    const modal = document.getElementById("limit-modal");
+    if (modal) modal.classList.remove("active");
+}
+
 function openUnlimitedNotice() {
-    alert("🎉 WebShield AI Community Edition: You have Unlimited Free Scans for educational and authorized defensive testing!");
+    if (currentUser) {
+        alert("You have Unlimited Scans as an active WebShield AI member.");
+    } else {
+        openLimitModal("Your free credits are over");
+    }
 }
 
 function showThreatIntelModal() {
@@ -3760,6 +5533,597 @@ function escapeHtml(str) {
         .replace(/'/g, "&#039;");
 }
 
-    </script>
+    
+
+
+function confirmClearChat() {
+    showConfirmModal({
+        title: "Clear Advisor Conversation?",
+        message: "All previous questions and security recommendations in this session will be cleared.",
+        confirmText: "Clear Conversation",
+        cancelText: "Keep Chat",
+        onConfirm: () => {
+            clearChatHistory();
+            showToastNotification("Advisor conversation cleared.");
+        }
+    });
+}
+
+function confirmLogout() {
+    showConfirmModal({
+        title: "Sign Out of WebShield AI?",
+        message: "Are you sure you want to end your active member session?",
+        confirmText: "Sign Out",
+        cancelText: "Stay Signed In",
+        onConfirm: () => {
+            handleLogout();
+        }
+    });
+}
+
+
+/**
+ * WebShield AI - Comprehensive 20 Features Engine
+ * Integrates seamlessly with existing scanner engine without breaking any existing functionality.
+ */
+
+// --------------------------------------------------------------------------
+// 1. Theme Engine: Light/Dark Theme Switcher with LocalStorage
+// --------------------------------------------------------------------------
+function initTheme() {
+    const savedTheme = localStorage.getItem('webshield_theme');
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    const theme = savedTheme ? savedTheme : (prefersLight ? 'light' : 'dark');
+    applyTheme(theme);
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('webshield_theme', theme);
+    updateThemeIcons(theme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(nextTheme);
+}
+
+function updateThemeIcons(theme) {
+    const iconSVGs = {
+        sun: `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`,
+        moon: `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`
+    };
+
+    document.querySelectorAll('.theme-toggle-icon').forEach(iconEl => {
+        // In light theme show moon to switch to dark; in dark theme show sun to switch to light
+        iconEl.innerHTML = theme === 'light' ? iconSVGs.moon : iconSVGs.sun;
+    });
+
+    document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+        btn.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} mode`);
+        btn.setAttribute('title', `Switch to ${theme === 'light' ? 'dark' : 'light'} mode`);
+    });
+}
+
+// --------------------------------------------------------------------------
+// 2. Scroll Progress Bar
+// --------------------------------------------------------------------------
+function initScrollProgress() {
+    const progressBar = document.getElementById('scroll-progress-bar');
+    if (!progressBar) return;
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        progressBar.style.width = `${progress}%`;
+        progressBar.setAttribute('aria-valuenow', Math.round(progress));
+    }, { passive: true });
+}
+
+// --------------------------------------------------------------------------
+// 3. Sticky Header Scroll Elevation
+// --------------------------------------------------------------------------
+function initStickyHeader() {
+    const header = document.querySelector('.top-navbar');
+    if (!header) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }, { passive: true });
+}
+
+// --------------------------------------------------------------------------
+// 4. Back to Top Button
+// --------------------------------------------------------------------------
+function initBackToTop() {
+    const btn = document.getElementById('btn-back-to-top');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            btn.classList.add('visible');
+            btn.setAttribute('aria-hidden', 'false');
+        } else {
+            btn.classList.remove('visible');
+            btn.setAttribute('aria-hidden', 'true');
+        }
+    }, { passive: true });
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// --------------------------------------------------------------------------
+// 5. Mobile Navigation Menu
+// --------------------------------------------------------------------------
+function toggleMobileMenu(forceClose = false) {
+    const overlay = document.getElementById('mobile-drawer-overlay');
+    const toggleBtn = document.getElementById('btn-mobile-menu');
+    if (!overlay || !toggleBtn) return;
+
+    const isOpen = overlay.classList.contains('active');
+    const willOpen = forceClose ? false : !isOpen;
+
+    if (willOpen) {
+        overlay.classList.add('active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    } else {
+        overlay.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+}
+
+// --------------------------------------------------------------------------
+// 6. Universal Copy to Clipboard
+// --------------------------------------------------------------------------
+async function copyToClipboard(text, btnElement) {
+    if (!text) return;
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        if (btnElement) {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.classList.add('copied');
+            btnElement.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Copied!</span>
+            `;
+            setTimeout(() => {
+                btnElement.classList.remove('copied');
+                btnElement.innerHTML = originalHTML;
+            }, 2000);
+        }
+        showToastNotification("Copied to clipboard!");
+    } catch (err) {
+        showToastNotification("Unable to copy to clipboard.");
+    }
+}
+
+// Accessible Toast Notification
+function showToastNotification(msg) {
+    let toast = document.getElementById('webshield-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'webshield-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-surface-elevated, #131722);
+            color: var(--text-main, #fff);
+            border: 1px solid var(--neon-cyan, #00e5ff);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 10010;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: all 0.25s ease;
+            pointer-events: none;
+        `;
+        document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 2500);
+}
+
+// --------------------------------------------------------------------------
+// 7. Site Search Engine
+// --------------------------------------------------------------------------
+const SITE_SEARCH_INDEX = [
+    { title: "Basic Scan Profile", category: "SCANNER", desc: "Fast surface audit inspecting SSL/TLS, HSTS, CSP, and exposed headers.", target: "#scanner-card" },
+    { title: "Medium Scan Profile", category: "SCANNER", desc: "Interactive level-1 BFS crawl evaluating HTML forms, POST CSRF tokens, and auth endpoints.", target: "#scanner-card" },
+    { title: "Deep Scan Profile", category: "SCANNER", desc: "Exhaustive depth-2 BFS queue crawl checking cookie flags, hidden files, and full PDF export.", target: "#scanner-card" },
+    { title: "A01: Broken Access Control", category: "OWASP", desc: "Detection of exposed /admin endpoints, sensitive directories, and unauthorized routes.", target: "#owasp-card-A01" },
+    { title: "A02: Cryptographic Failures", category: "OWASP", desc: "SSL/TLS validation, Strict-Transport-Security (HSTS), and insecure HTTP transmissions.", target: "#owasp-card-A02" },
+    { title: "A03: Injection (SQL & XSS)", category: "OWASP", desc: "Cross-Site Scripting (XSS) input surface mapping and unvalidated form submission checks.", target: "#owasp-card-A03" },
+    { title: "A04: Insecure Design", category: "OWASP", desc: "Rate-limiting absence, bot credential-stuffing exposure, and missing security architecture.", target: "#owasp-card-A04" },
+    { title: "A05: Security Misconfiguration", category: "OWASP", desc: "Missing CSP, X-Frame-Options, X-Content-Type-Options nosniff, and default file leaks.", target: "#owasp-card-A05" },
+    { title: "A06: Vulnerable & Outdated Components", category: "OWASP", desc: "Exposed web server technology banners (Server, X-Powered-By) and known version vulnerabilities.", target: "#owasp-card-A06" },
+    { title: "A07: Identification & Auth Failures", category: "OWASP", desc: "Unencrypted login form submissions, missing password protection, and session cookie flags.", target: "#owasp-card-A07" },
+    { title: "A08: Software & Data Integrity Failures", category: "OWASP", desc: "Subresource Integrity (SRI) on external scripts and untrusted CDN imports.", target: "#owasp-card-A08" },
+    { title: "A09: Security Logging & Monitoring", category: "OWASP", desc: "Suspicious HTTP status code audits and missing threat detection telemetry.", target: "#owasp-card-A09" },
+    { title: "A10: Server-Side Request Forgery (SSRF)", category: "OWASP", desc: "Targeted outbound URL parameter checks and unauthorized internal network calls.", target: "#owasp-card-A10" },
+    { title: "Discovered Pages & Attack Surface", category: "PAGES", desc: "View all crawled site routes, depth hierarchy, and HTTP response codes.", target: "#attack-surface-section" },
+    { title: "Security Issues & Findings", category: "FINDINGS", desc: "Review severity-rated vulnerability cards, impacted endpoints, and remediation fixes.", target: "#findings-section" },
+    { title: "Privacy Policy", category: "LEGAL", desc: "Data protection standards, temporary scan cache retention, and user privacy rights.", target: "/privacy" },
+    { title: "Terms and Conditions", category: "LEGAL", desc: "Authorized scanning requirements, liability limitations, and permitted use.", target: "/terms" },
+    { title: "Frequently Asked Questions", category: "FAQ", desc: "Learn how the BFS engine works, scan permissions, and safety guarantees.", target: "#faq-section" }
+];
+
+let activeSearchFilter = "ALL";
+
+function openSiteSearch() {
+    const modal = document.getElementById('site-search-modal');
+    const input = document.getElementById('site-search-input');
+    if (!modal) return;
+    modal.classList.add('active');
+    if (input) {
+        input.value = "";
+        setTimeout(() => input.focus(), 50);
+        renderSearchResults("");
+    }
+}
+
+function closeSiteSearch() {
+    const modal = document.getElementById('site-search-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+function filterSearchCategory(category, btnElement) {
+    activeSearchFilter = category;
+    document.querySelectorAll('.search-filter-pill').forEach(btn => btn.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+    const input = document.getElementById('site-search-input');
+    renderSearchResults(input ? input.value : "");
+}
+
+function handleSiteSearchInput(e) {
+    renderSearchResults(e.target.value);
+}
+
+function renderSearchResults(query) {
+    const container = document.getElementById('search-results-container');
+    if (!container) return;
+
+    const trimmed = query.trim().toLowerCase();
+    const filtered = SITE_SEARCH_INDEX.filter(item => {
+        const matchesCategory = activeSearchFilter === "ALL" || item.category === activeSearchFilter;
+        if (!matchesCategory) return false;
+        if (!trimmed) return true;
+        return item.title.toLowerCase().includes(trimmed) || 
+               item.desc.toLowerCase().includes(trimmed) ||
+               item.category.toLowerCase().includes(trimmed);
+    });
+
+    if (!filtered.length) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 32px 16px; color: var(--text-dim);">
+                <div style="font-size: 1rem; margin-bottom: 4px;">No matches found for "${escapeHtml(query)}"</div>
+                <div style="font-size: 0.8rem;">Try searching for "OWASP", "CSP", "HSTS", or "Login"</div>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = filtered.map(item => `
+        <a href="${item.target}" class="search-result-item" onclick="onSearchResultClick('${item.target}', event)">
+            <div class="search-result-top">
+                <span class="search-result-title">${escapeHtml(item.title)}</span>
+                <span class="search-result-category">${escapeHtml(item.category)}</span>
+            </div>
+            <div class="search-result-desc">${escapeHtml(item.desc)}</div>
+        </a>
+    `).join('');
+}
+
+function onSearchResultClick(target, event) {
+    closeSiteSearch();
+    if (target.startsWith('#')) {
+        event.preventDefault();
+        const el = document.querySelector(target);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
+
+// --------------------------------------------------------------------------
+// 8. Cookie Consent & Preferences Management
+// --------------------------------------------------------------------------
+function initCookieConsent() {
+    const consent = localStorage.getItem('webshield_cookie_consent');
+    if (!consent) {
+        setTimeout(() => {
+            const banner = document.getElementById('cookie-banner');
+            if (banner) banner.classList.add('active');
+        }, 800);
+    } else {
+        try {
+            const parsed = JSON.parse(consent);
+            applyCookiePreferences(parsed);
+        } catch (e) {}
+    }
+}
+
+function acceptAllCookies() {
+    const preferences = { necessary: true, analytics: true, telemetry: true, timestamp: new Date().toISOString() };
+    saveConsent(preferences);
+}
+
+function rejectOptionalCookies() {
+    const preferences = { necessary: true, analytics: false, telemetry: false, timestamp: new Date().toISOString() };
+    saveConsent(preferences);
+}
+
+function saveConsent(preferences) {
+    localStorage.setItem('webshield_cookie_consent', JSON.stringify(preferences));
+    const banner = document.getElementById('cookie-banner');
+    if (banner) banner.classList.remove('active');
+    closeCookiePreferences();
+    applyCookiePreferences(preferences);
+    showToastNotification("Cookie preferences saved.");
+}
+
+function applyCookiePreferences(prefs) {
+    if (prefs.analytics) {
+        initUtmTracking(true);
+    }
+}
+
+function openCookiePreferences() {
+    const modal = document.getElementById('cookie-prefs-modal');
+    if (!modal) return;
+    const consent = localStorage.getItem('webshield_cookie_consent');
+    if (consent) {
+        try {
+            const parsed = JSON.parse(consent);
+            const analyticsInput = document.getElementById('cookie-pref-analytics');
+            const telemetryInput = document.getElementById('cookie-pref-telemetry');
+            if (analyticsInput) analyticsInput.checked = !!parsed.analytics;
+            if (telemetryInput) telemetryInput.checked = !!parsed.telemetry;
+        } catch (e) {}
+    }
+    modal.classList.add('active');
+}
+
+function closeCookiePreferences() {
+    const modal = document.getElementById('cookie-prefs-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+function saveCustomPreferences() {
+    const analytics = document.getElementById('cookie-pref-analytics')?.checked ?? false;
+    const telemetry = document.getElementById('cookie-pref-telemetry')?.checked ?? false;
+    saveConsent({ necessary: true, analytics, telemetry, timestamp: new Date().toISOString() });
+}
+
+// --------------------------------------------------------------------------
+// 9. UTM Parameter Attribution Tracking
+// --------------------------------------------------------------------------
+function initUtmTracking(consentGranted = false) {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+        const utmFound = {};
+        let hasUtm = false;
+
+        utmKeys.forEach(key => {
+            const val = urlParams.get(key);
+            if (val) {
+                utmFound[key] = val.trim();
+                hasUtm = true;
+            }
+        });
+
+        if (hasUtm) {
+            sessionStorage.setItem('webshield_utm', JSON.stringify(utmFound));
+        }
+    } catch (e) {}
+}
+
+function getStoredUtm() {
+    try {
+        const stored = sessionStorage.getItem('webshield_utm');
+        return stored ? JSON.parse(stored) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+// --------------------------------------------------------------------------
+// 10. Floating Contact Button & Security Disclosure Modal
+// --------------------------------------------------------------------------
+function openContactModal() {
+    const modal = document.getElementById('contact-modal');
+    if (modal) modal.classList.add('active');
+}
+
+function closeContactModal() {
+    const modal = document.getElementById('contact-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+async function handleContactSubmit(e) {
+    e.preventDefault();
+    const nameInput = document.getElementById('contact-name');
+    const emailInput = document.getElementById('contact-email');
+    const subjectInput = document.getElementById('contact-subject');
+    const messageInput = document.getElementById('contact-message');
+    const urlInput = document.getElementById('contact-target-url');
+    const submitBtn = document.getElementById('contact-btn-submit');
+    const alertBox = document.getElementById('contact-alert-box');
+
+    const email = emailInput?.value.trim() || "";
+    const message = messageInput?.value.trim() || "";
+
+    // Clear previous errors
+    emailInput?.classList.remove('is-invalid');
+    messageInput?.classList.remove('is-invalid');
+    if (alertBox) alertBox.style.display = 'none';
+
+    if (!email || !email.includes('@')) {
+        emailInput?.classList.add('is-invalid');
+        emailInput?.focus();
+        showContactAlert('error', 'Please enter a valid email address.');
+        return;
+    }
+
+    if (!message || message.length < 5) {
+        messageInput?.classList.add('is-invalid');
+        messageInput?.focus();
+        showContactAlert('error', 'Please write a message of at least 5 characters.');
+        return;
+    }
+
+    const utm = getStoredUtm();
+    const payload = {
+        name: nameInput?.value.trim() || "",
+        email: email,
+        subject: subjectInput?.value || "General Inquiry",
+        message: message,
+        target_url: urlInput?.value.trim() || "",
+        utm_source: utm.utm_source || "",
+        utm_medium: utm.utm_medium || ""
+    };
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="spinner-inline" style="margin-right: 6px;"></span> Sending...`;
+    }
+
+    try {
+        const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+            showContactAlert('success', data.message || `Message received. Reference ID: ${data.reference_id}`);
+            // Reset fields
+            if (messageInput) messageInput.value = "";
+            if (urlInput) urlInput.value = "";
+            setTimeout(() => {
+                closeContactModal();
+                if (alertBox) alertBox.style.display = 'none';
+            }, 3000);
+        } else {
+            showContactAlert('error', data.message || 'Error sending message. Please try again.');
+        }
+    } catch (err) {
+        showContactAlert('error', 'Network error. Could not contact the server.');
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Send Message';
+        }
+    }
+}
+
+function showContactAlert(type, msg) {
+    const box = document.getElementById('contact-alert-box');
+    if (!box) return;
+    box.className = type === 'success' ? 'form-success-banner' : 'form-error-text';
+    box.innerText = msg;
+    box.style.display = 'block';
+}
+
+// --------------------------------------------------------------------------
+// 11. Confirmation Modal for Destructive Actions
+// --------------------------------------------------------------------------
+let confirmCallback = null;
+
+function showConfirmModal({ title, message, confirmText = "Confirm", cancelText = "Cancel", onConfirm }) {
+    const modal = document.getElementById('confirm-modal');
+    const titleEl = document.getElementById('confirm-modal-title');
+    const descEl = document.getElementById('confirm-modal-desc');
+    const confirmBtn = document.getElementById('confirm-modal-btn');
+    const cancelBtn = document.getElementById('confirm-modal-cancel');
+
+    if (!modal) return;
+    if (titleEl) titleEl.innerText = title;
+    if (descEl) descEl.innerText = message;
+    if (confirmBtn) confirmBtn.innerText = confirmText;
+    if (cancelBtn) cancelBtn.innerText = cancelText;
+
+    confirmCallback = onConfirm;
+    modal.classList.add('active');
+    setTimeout(() => confirmBtn?.focus(), 50);
+}
+
+function closeConfirmModal() {
+    const modal = document.getElementById('confirm-modal');
+    if (modal) modal.classList.remove('active');
+    confirmCallback = null;
+}
+
+function executeConfirmAction() {
+    if (typeof confirmCallback === 'function') {
+        confirmCallback();
+    }
+    closeConfirmModal();
+}
+
+// --------------------------------------------------------------------------
+// Global Keyboard Shortcut Listeners
+// --------------------------------------------------------------------------
+document.addEventListener('keydown', (e) => {
+    // Ctrl+K or / opens site search
+    if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName))) {
+        e.preventDefault();
+        openSiteSearch();
+    }
+    // Escape closes modals
+    if (e.key === 'Escape') {
+        closeSiteSearch();
+        closeContactModal();
+        closeConfirmModal();
+        closeCookiePreferences();
+        toggleMobileMenu(true);
+    }
+});
+
+// Run initializers
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    initScrollProgress();
+    initStickyHeader();
+    initBackToTop();
+    initCookieConsent();
+    initUtmTracking();
+});
+
+</script>
 </body>
 </html>

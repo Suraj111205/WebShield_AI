@@ -3,22 +3,36 @@ from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, HttpUrl, Field
 from pathlib import Path
-from app.services.verifier import verify_target
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+
+from app.services.verifier import verify_target, clean_url
 from app.services.crawler import crawl
 from app.services.scanner import passive_scan
 from app.services.analyzer import analyze_findings
 from app.services.reporter import generate_pdf_report
+from app.services.ai_service import ask_ai_assistant
+from app.database import (
+    create_user,
+    authenticate_user,
+    create_user_session,
+    get_user_by_token,
+    revoke_session,
+    get_guest_quota,
+    record_scan_usage,
+    reset_guest_quotas,
+    reset_quota_for_identifier,
+    GUEST_SCAN_LIMIT
+)
 
 app = FastAPI(title="WebShield AI - Security Advisor & Vulnerability Scanner", version="2.0.0")
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 REPORT_DIR = BASE_DIR / "reports"
 REPORT_DIR.mkdir(exist_ok=True)
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "frontend")), name="static")
-
-
-from app.services.verifier import verify_target, clean_url
 
 class ScanRequest(BaseModel):
     target_url: str
@@ -26,12 +40,60 @@ class ScanRequest(BaseModel):
     scan_speed: str = Field(default="Balanced")
     report_format: str = Field(default="PDF")
     authorized: bool = False
+    utm_source: str = ""
+    utm_medium: str = ""
+    utm_campaign: str = ""
 
 
 class AIAskRequest(BaseModel):
     question: str
     finding_type: str = ""
     context: str = ""
+    api_key: str = ""
+
+
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    name: str = ""
+    utm_source: str = ""
+    utm_medium: str = ""
+    utm_campaign: str = ""
+
+
+class ContactRequest(BaseModel):
+    name: str = ""
+    email: str
+    subject: str = "General Inquiry"
+    message: str
+    target_url: str = ""
+    utm_source: str = ""
+    utm_medium: str = ""
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+def get_auth_context(request: Request):
+    """Extract authenticated user and guest identifier from request."""
+    auth_header = request.headers.get("authorization", "")
+    token = ""
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:].strip()
+    if not token:
+        token = request.headers.get("x-auth-token", "")
+    if not token:
+        token = request.cookies.get("webshield_session", "")
+
+    user = get_user_by_token(token) if token else None
+
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    guest_id_header = request.headers.get("x-guest-id", "").strip()
+    identifier = guest_id_header if guest_id_header else client_ip
+
+    return user, identifier, token
 
 
 @app.middleware("http")
@@ -50,6 +112,167 @@ def home():
     return response
 
 
+@app.get("/login", response_class=HTMLResponse)
+def login_page():
+    response = FileResponse(BASE_DIR / "frontend" / "login.html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    return response
+
+
+@app.get("/register", response_class=HTMLResponse)
+def register_page():
+    response = FileResponse(BASE_DIR / "frontend" / "register.html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    return response
+
+
+@app.get("/privacy", response_class=HTMLResponse)
+def privacy_page():
+    response = FileResponse(BASE_DIR / "frontend" / "privacy.html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    return response
+
+
+@app.get("/terms", response_class=HTMLResponse)
+def terms_page():
+    response = FileResponse(BASE_DIR / "frontend" / "terms.html")
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    return response
+
+
+@app.get("/favicon.svg")
+def favicon():
+    return FileResponse(BASE_DIR / "frontend" / "favicon.svg", media_type="image/svg+xml")
+
+
+@app.get("/favicon.ico")
+def favicon_ico():
+    return FileResponse(BASE_DIR / "frontend" / "favicon.svg", media_type="image/svg+xml")
+
+
+
+# =====================================================================
+# Authentication Endpoints
+# =====================================================================
+
+@app.post("/api/auth/register")
+def register(req: RegisterRequest):
+    user, err = create_user(email=req.email, password=req.password, name=req.name)
+    if not user:
+        return {"success": False, "message": err}
+
+    token = create_user_session(user.id)
+    return {
+        "success": True,
+        "token": token,
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "name": user.name,
+            "scan_count": user.scan_count
+        }
+    }
+
+
+@app.post("/api/auth/login")
+def login(req: LoginRequest):
+    user = authenticate_user(email=req.email, password=req.password)
+    if not user:
+        return {"success": False, "message": "Invalid email or password."}
+
+    token = create_user_session(user.id)
+    return {
+        "success": True,
+        "token": token,
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "name": user.name,
+            "scan_count": user.scan_count
+        }
+    }
+
+
+@app.post("/api/auth/logout")
+def logout(request: Request):
+    _, _, token = get_auth_context(request)
+    if token:
+        revoke_session(token)
+    return {"success": True}
+
+
+@app.get("/api/auth/status")
+def auth_status(request: Request):
+    user, identifier, _ = get_auth_context(request)
+    if user:
+        return {
+            "authenticated": True,
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "name": user.name,
+                "scan_count": user.scan_count
+            },
+            "quota": {
+                "is_unlimited": True,
+                "used": user.scan_count,
+                "remaining": "unlimited",
+                "can_scan": True
+            }
+        }
+    else:
+        quota = get_guest_quota(identifier)
+        return {
+            "authenticated": False,
+            "user": None,
+            "quota": quota
+        }
+
+
+@app.post("/api/contact")
+def submit_contact(req: ContactRequest):
+    if not req.email or "@" not in req.email:
+        return {"success": False, "message": "Please provide a valid email address."}
+    if not req.message or len(req.message.strip()) < 5:
+        return {"success": False, "message": "Please include a message with at least 5 characters."}
+
+    import uuid
+    ref_id = f"WSAI-{uuid.uuid4().hex[:8].upper()}"
+    contact_log = BASE_DIR / "reports" / "contact_inquiries.log"
+    try:
+        with open(contact_log, "a", encoding="utf-8") as f:
+            f.write(f"[{ref_id}] From: {req.name} <{req.email}> | Subject: {req.subject} | URL: {req.target_url} | UTM: {req.utm_source}/{req.utm_medium} | Message: {req.message}\n")
+    except Exception:
+        pass
+
+    return {
+        "success": True,
+        "reference_id": ref_id,
+        "message": f"Inquiry submitted successfully. Your reference ID is {ref_id}."
+    }
+
+
+@app.post("/api/auth/reset-quota")
+def reset_guest_quota_api(request: Request):
+    """Reset free scan credits for guest user so refreshing starts clean."""
+    user, identifier, _ = get_auth_context(request)
+    if not user:
+        reset_quota_for_identifier(identifier)
+        return {
+            "success": True,
+            "quota": get_guest_quota(identifier)
+        }
+    return {
+        "success": True,
+        "is_unlimited": True,
+        "message": "User is authenticated with unlimited scans"
+    }
+
+
+# =====================================================================
+# Core Scanner Endpoints with Quota Verification
+# =====================================================================
+
 @app.post("/api/verify")
 def verify(req: ScanRequest):
     if not req.authorized:
@@ -61,14 +284,33 @@ def verify(req: ScanRequest):
 
 
 @app.post("/api/scan")
-def run_scan(req: ScanRequest):
+def run_scan(req: ScanRequest, request: Request):
+    user, identifier, _ = get_auth_context(request)
+
+    # Enforce scan limit for non-authenticated guests
+    if not user:
+        quota = get_guest_quota(identifier)
+        if not quota["can_scan"]:
+            return {
+                "status": "error",
+                "error_code": "SCAN_LIMIT_REACHED",
+                "limit_reached": True,
+                "quota": quota,
+                "message": "Your free credits are over! Please sign in or register for free unlimited scans."
+            }
+
     if not req.authorized:
         return {"status": "error", "message": "Only test websites that you own or have permission to test."}
 
     target = clean_url(req.target_url)
     verification = verify_target(target)
     if not verification["valid"]:
-        return {"status": "error", "stage": "verification", "verification": verification, "message": verification.get("message", "Could not reach this website.")}
+        return {
+            "status": "error",
+            "stage": "verification",
+            "verification": verification,
+            "message": verification.get("message", "Could not reach this website.")
+        }
 
     # Use verified canonical target URL (e.g. following redirects)
     target = verification.get("url", target)
@@ -82,6 +324,14 @@ def run_scan(req: ScanRequest):
         verification=verification,
         crawl_result=crawl_result,
         findings=analyzed
+    )
+
+    # Record scan usage and update quota
+    updated_quota = record_scan_usage(
+        identifier=identifier,
+        user=user,
+        target_url=target,
+        vuln_count=len(analyzed)
     )
 
     return {
@@ -104,189 +354,19 @@ def run_scan(req: ScanRequest):
             "endpoints_data": crawl_result.get("endpoints", [])
         },
         "vulnerabilities": analyzed,
-        "report": f"/reports/{report_path.name}"
+        "report": f"/reports/{report_path.name}",
+        "quota": updated_quota
     }
 
 
 @app.post("/api/ai/ask")
 def ai_assistant(req: AIAskRequest):
-    q = req.question.lower().strip()
-    
-    # 1. OWASP Top 10 Inquiries
-    if "owasp" in q or "top 10" in q or "top ten" in q:
-        return {
-            "title": "What is the OWASP Top 10?",
-            "category": "OWASP Security Standards",
-            "content": (
-                "The OWASP Top 10 is the universally recognized checklist of the 10 most critical security risks facing web applications today.\n\n"
-                "Here is how WebShield AI scans and addresses them:\n"
-                "• A01 Broken Access Control: We scan for exposed admin paths (/admin, /login) and unrestricted internal routes.\n"
-                "• A02 Cryptographic Failures: We verify SSL/TLS certificates and enforce HTTPS via HSTS headers.\n"
-                "• A03 Injection (SQLi, XSS): We inspect all HTML forms for unvalidated inputs, missing sanitization, and lack of CSP.\n"
-                "• A05 Security Misconfiguration: We check for missing security headers (CSP, X-Frame-Options, X-Content-Type) and default error leaks.\n"
-                "• A06 Vulnerable Components: We inspect Server and X-Powered-By response headers to detect outdated software versions.\n"
-                "• A07 Identification Failures: We check login forms for insecure unencrypted HTTP submissions and missing CSRF tokens."
-            ),
-            "remediation": {
-                "reference": "Visit the OWASP section on our dashboard for beginner-friendly breakdowns of all 10 categories.",
-                "guide": "Run a Medium or Deep scan to automatically audit your website against these risks."
-            }
-        }
-
-    # 2. Scanning Levels Explanation
-    if "level" in q or "basic scan" in q or "medium scan" in q or "deep scan" in q or "difference" in q:
-        return {
-            "title": "WebShield AI Scanning Levels Explained",
-            "category": "Scanning Methodology",
-            "content": (
-                "WebShield AI offers 3 progressive scanning levels:\n\n"
-                "1. Basic Scan (Homepage Only):\n"
-                "   • Speed: 2-5 seconds\n"
-                "   • What it checks: SSL/TLS certificate validity, HSTS, CSP, X-Frame-Options (Clickjacking), X-Content-Type-Options (MIME sniffing), and server version exposure.\n\n"
-                "2. Medium Scan (Homepage + Direct Links - Recommended):\n"
-                "   • Speed: 10-20 seconds\n"
-                "   • What it checks: Everything in Basic, plus follows all first-tier internal links using BFS queue crawling, inspects HTML forms for unencrypted transmission and missing CSRF tokens, and discovers exposed admin/login paths.\n\n"
-                "3. Deep Scan (Full Tree Crawl up to Depth 2 & 25 Pages):\n"
-                "   • Speed: 30-60 seconds\n"
-                "   • What it checks: Comprehensive multi-page link graph, cookie security flags (Secure, HttpOnly, SameSite), open directory indexing, sensitive file exposure (.env, .git, backups), and full PDF executive report generation."
-            ),
-            "remediation": {
-                "tip": "Start with a Basic Scan for a quick check, then run a Medium Scan to test your contact and login forms."
-            }
-        }
-
-    # 3. Algorithms & Detection Methods
-    if "algorithm" in q or "method" in q or "technique" in q or "how detect" in q:
-        return {
-            "title": "Algorithms & Detection Methods in WebShield AI",
-            "category": "Detection Engine",
-            "content": (
-                "WebShield AI uses a hybrid passive analysis engine:\n\n"
-                "1. Breadth-First Search (BFS) Crawler:\n"
-                "   • Uses collections.deque FIFO queue to traverse site links level-by-level.\n"
-                "   • Uses a visited set and URL canonicalization to avoid duplicate requests and infinite loops.\n"
-                "   • Connection pooling with requests.Session() and keep-alive for 10x faster crawling.\n\n"
-                "2. Heuristic HTTP Header Inspection:\n"
-                "   • Parses response header dictionaries against security best-practice rules (RFC 6797 for HSTS, CSP Level 3, RFC 7034 for X-Frame-Options).\n\n"
-                "3. DOM Form & Input Parameter Parsing:\n"
-                "   • Uses BeautifulSoup4 to parse HTML DOM trees, identifying all <form> tags, action destinations, HTTP methods (GET vs POST), and CSRF token presence.\n\n"
-                "4. CVSS v3.1 Scoring Algorithm:\n"
-                "   • Calculates risk scores (Low: 0.1-3.9, Medium: 4.0-6.9, High: 7.0-8.9, Critical: 9.0-10.0) based on exploitability and impact."
-            ),
-            "remediation": None
-        }
-
-    # 4. SQL Injection & XSS
-    if "sql" in q or "injection" in q:
-        return {
-            "title": "How WebShield AI Detects SQL Injection Risks",
-            "category": "Injection Defense (OWASP A03)",
-            "content": (
-                "SQL Injection occurs when user input is concatenated directly into database queries.\n\n"
-                "How WebShield AI checks for SQLi risks:\n"
-                "• It maps every input field in your website forms (search boxes, login fields, comment boxes).\n"
-                "• It checks whether inputs allow unrestricted parameters without CSRF protection and unencrypted HTTP delivery.\n"
-                "• It warns you to use parameterized queries/prepared statements so user input is never executed as database code."
-            ),
-            "remediation": {
-                "python_sql": "cursor.execute('SELECT * FROM users WHERE email = %s', (user_email,))",
-                "php_pdo": "$stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email'); $stmt->execute(['email' => $email]);",
-                "rule": "Never concatenate strings into SQL queries."
-            }
-        }
-
-    if "xss" in q or "cross-site scripting" in q or "script" in q:
-        return {
-            "title": "Protecting Against Cross-Site Scripting (XSS)",
-            "category": "Injection Defense (OWASP A03)",
-            "content": (
-                "XSS happens when an attacker injects malicious JavaScript into your webpage, stealing session cookies or redirecting users.\n\n"
-                "How WebShield AI checks for XSS:\n"
-                "• It checks for missing Content-Security-Policy (CSP) headers.\n"
-                "• It checks for missing X-XSS-Protection and X-Content-Type-Options headers.\n"
-                "• It checks cookie flags to ensure cookies have HttpOnly set so JavaScript cannot read them."
-            ),
-            "remediation": {
-                "nginx": "add_header Content-Security-Policy \"default-src 'self'; script-src 'self';\" always;",
-                "cookie_rule": "Always set HttpOnly and Secure flags on session cookies."
-            }
-        }
-
-    # 5. How Crawler Works
-    if "how does" in q or "work" in q or "crawl" in q or "spider" in q or "bfs" in q:
-        return {
-            "title": "How WebShield AI Explores Your Website",
-            "category": "How It Works",
-            "content": (
-                "Think of WebShield AI like a smart visitor browsing your website:\n\n"
-                "1. **Start at Home:** It visits your main website address first.\n"
-                "2. **Find All Links:** It looks at every button and link on that page to see where they go.\n"
-                "3. **Check Level by Level (BFS Algorithm):** It uses a FIFO queue to check all direct pages on your site before exploring deeper links (like a tree spreading out evenly).\n"
-                "4. **Stay Safe:** It never clicks external websites and sets a sensible page limit so your server never gets overloaded."
-            ),
-            "remediation": None
-        }
-
-    if "csp" in q or "content-security-policy" in q or "content security policy" in q:
-        return {
-            "title": "What is Content-Security-Policy (CSP)?",
-            "category": "Website Protection",
-            "content": (
-                "Think of CSP like a guest list for your website. It tells web browsers: 'Only run scripts and load pictures from trusted places.'\n\n"
-                "Without it, a hacker might trick your site into running malicious code from somewhere else. Adding this one rule stops most script-injection attacks instantly."
-            ),
-            "remediation": {
-                "nginx": "add_header Content-Security-Policy \"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';\" always;",
-                "apache": "Header set Content-Security-Policy \"default-src 'self'; script-src 'self';\"",
-                "easy_explanation": "Add this line into your web server settings so browsers only load files from your own domain."
-            }
-        }
-
-    if "hsts" in q or "strict-transport-security" in q or "https" in q or "ssl" in q:
-        return {
-            "title": "Why You Need HSTS (Secure HTTPS)",
-            "category": "Safe Browsing",
-            "content": (
-                "HSTS tells visitors' browsers: 'Always use a secure, encrypted HTTPS padlock connection when talking to this website — never use unencrypted HTTP.'\n\n"
-                "This keeps your users safe from anyone trying to spy on their internet connection (like on public Wi-Fi)."
-            ),
-            "remediation": {
-                "nginx": "add_header Strict-Transport-Security \"max-age=31536000; includeSubDomains\" always;",
-                "apache": "Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains\""
-            }
-        }
-
-    if "server" in q or "banner" in q or "hide" in q or "version" in q:
-        return {
-            "title": "Why Should I Hide My Server Version?",
-            "category": "Basic Security Hygiene",
-            "content": (
-                "When your web server responds, it often announces its name and exact version (like 'Apache 2.4.41').\n\n"
-                "Hiding this is like not advertising the brand of lock on your front door. It stops automated bot scanners from knowing which specific bugs might exist."
-            ),
-            "remediation": {
-                "nginx": "server_tokens off;",
-                "apache": "ServerTokens Prod"
-            }
-        }
-
-    # Friendly default advice
-    return {
-        "title": "WebShield AI Security Advice",
-        "category": "Security Tips",
-        "content": (
-            f"Here is helpful advice regarding: '{req.question}'\n\n"
-            "Key Website Protection Principles:\n"
-            "1. **Use HTTPS Everywhere:** Enforce SSL with HSTS so user traffic cannot be intercepted.\n"
-            "2. **Add Defense Headers:** Add Content-Security-Policy (CSP) and X-Frame-Options to stop clickjacking & malicious scripts.\n"
-            "3. **Protect Forms:** Ensure all POST forms submit over HTTPS and include anti-CSRF verification tokens.\n"
-            "4. **Hide Server Footprints:** Disable detailed version banners on your web server.\n\n"
-            "You can also ask me: 'What are the OWASP Top 10?', 'Explain scan levels', or 'What algorithms are used?'"
-        ),
-        "remediation": {
-            "help": "Run a scan on the dashboard to see instant, personalized fixes for your specific website!"
-        }
-    }
+    return ask_ai_assistant(
+        question=req.question,
+        context=req.context,
+        finding_type=req.finding_type,
+        client_api_key=req.api_key
+    )
 
 
 @app.get("/reports/{filename}")
